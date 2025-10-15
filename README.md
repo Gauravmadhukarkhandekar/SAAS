@@ -27,7 +27,7 @@ Built with **React (frontend)** and **Node.js + Express (backend)**
 - **Cloud Services**: AWS Amplify
   - Hosting (S3 + CloudFront)
   - Authentication (Cognito – Google Sign-In)
-  - API & Database (GraphQL + DynamoDB – coming soon)
+  - API & Database (REST API + DynamoDB )
   - Storage (S3 for media uploads – coming soon)
 ---
 
