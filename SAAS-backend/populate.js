@@ -16,23 +16,17 @@ const HabitCompletion = require('./model/habitCompletion');
 const Reminder = require('./model/reminder');
 const Report = require('./model/report');
 
-// This function simulates connecting to MongoDB without actually doing it
-// Perfect for testing the script when you don't have MongoDB installed yet
+// MongoDB Atlas connection function
 const connectDB = async () => {
-  console.log(' Simulating MongoDB connection...');
-  console.log(' Connection URL: mongodb://localhost:27017/saas_habit_tracker');
-  console.log(' MongoDB Connected (SIMULATED - no real connection)');
-  
-  // Add a small delay to make it feel realistic, like a real database connection
-  await new Promise(resolve => setTimeout(resolve, 1000));
-  
-  // Return fake connection info that matches what real MongoDB would return
-  return {
-    connection: {
-      host: 'localhost:27017',
-      name: 'saas_habit_tracker'
-    }
-  };
+  try {
+    console.log('🔄 Connecting to MongoDB...');
+    const conn = await mongoose.connect('mongodb+srv://skaranam_db_user:1XJVMsqzGurXtM7H@cluster1.wywgal3.mongodb.net/saas_habit_tracker');
+    console.log('✅ MongoDB Connected');
+    return conn;
+  } catch (error) {
+    console.error('❌ MongoDB connection error:', error.message);
+    process.exit(1);
+  }
 };
 
 // Here's all our sample data - this represents what a real app might have
@@ -279,88 +273,100 @@ const sampleReports = [
   }
 ];
 
-// These functions simulate what would happen when we populate the database
-// Instead of actually inserting data, they just show us what would be inserted
+// Real database population functions
 const populateUsers = async () => {
-  console.log('👥 Simulating users population...');
-  console.log(`   - Clearing existing users collection`);
-  console.log(`   - Inserting ${sampleUsers.length} users:`);
-  // Loop through each user and show what we'd be adding
-  sampleUsers.forEach(user => {
-    console.log(`     • ${user.name} (${user.email}) - ${user.isPro ? 'Pro' : 'Basic'}`);
-  });
-  await new Promise(resolve => setTimeout(resolve, 500)); // Add a delay to make it feel real
-  console.log('✅ Users populated successfully (SIMULATED)');
+  try {
+    console.log('👥 Populating users...');
+    await User.deleteMany({}); // Clear existing users
+    await User.insertMany(sampleUsers);
+    console.log(`✅ Users populated successfully (${sampleUsers.length} users)`);
+  } catch (error) {
+    console.error('❌ Error populating users:', error.message);
+    throw error;
+  }
 };
 
 const populateAuthTokens = async () => {
-  console.log('🔐 Simulating auth tokens population...');
-  console.log(`   - Clearing existing tokens collection`);
-  console.log(`   - Inserting ${sampleAuthTokens.length} auth tokens`);
-  await new Promise(resolve => setTimeout(resolve, 300)); // Shorter delay for tokens
-  console.log('✅ Auth tokens populated successfully (SIMULATED)');
+  try {
+    console.log('🔐 Populating auth tokens...');
+    await AuthToken.deleteMany({}); // Clear existing tokens
+    await AuthToken.insertMany(sampleAuthTokens);
+    console.log(`✅ Auth tokens populated successfully (${sampleAuthTokens.length} tokens)`);
+  } catch (error) {
+    console.error('❌ Error populating auth tokens:', error.message);
+    throw error;
+  }
 };
 
 const populateSubscriptions = async () => {
-  console.log('💳 Simulating subscriptions population...');
-  console.log(`   - Clearing existing subscriptions collection`);
-  console.log(`   - Inserting ${sampleSubscriptions.length} subscriptions:`);
-  sampleSubscriptions.forEach(sub => {
-    console.log(`     • ${sub.userId} - ${sub.planType} plan (${sub.isActive ? 'Active' : 'Inactive'})`);
-  });
-  await new Promise(resolve => setTimeout(resolve, 400));
-  console.log('✅ Subscriptions populated successfully (SIMULATED)');
+  try {
+    console.log('💳 Populating subscriptions...');
+    await Subscription.deleteMany({}); // Clear existing subscriptions
+    await Subscription.insertMany(sampleSubscriptions);
+    console.log(`✅ Subscriptions populated successfully (${sampleSubscriptions.length} subscriptions)`);
+  } catch (error) {
+    console.error('❌ Error populating subscriptions:', error.message);
+    throw error;
+  }
 };
 
 const populateHabits = async () => {
-  console.log('🎯 Simulating habits population...');
-  console.log(`   - Clearing existing habits collection`);
-  console.log(`   - Inserting ${sampleHabits.length} habits:`);
-  sampleHabits.forEach(habit => {
-    console.log(`     • ${habit.name} (${habit.category}, ${habit.frequency})`);
-  });
-  await new Promise(resolve => setTimeout(resolve, 500));
-  console.log('✅ Habits populated successfully (SIMULATED)');
+  try {
+    console.log('🎯 Populating habits...');
+    await Habit.deleteMany({}); // Clear existing habits
+    await Habit.insertMany(sampleHabits);
+    console.log(`✅ Habits populated successfully (${sampleHabits.length} habits)`);
+  } catch (error) {
+    console.error('❌ Error populating habits:', error.message);
+    throw error;
+  }
 };
 
 const populateHabitCompletions = async () => {
-  console.log('✅ Simulating habit completions population...');
-  console.log(`   - Clearing existing completions collection`);
-  console.log(`   - Inserting ${sampleHabitCompletions.length} habit completions`);
-  await new Promise(resolve => setTimeout(resolve, 400));
-  console.log('✅ Habit completions populated successfully (SIMULATED)');
+  try {
+    console.log('✅ Populating habit completions...');
+    await HabitCompletion.deleteMany({}); // Clear existing completions
+    await HabitCompletion.insertMany(sampleHabitCompletions);
+    console.log(`✅ Habit completions populated successfully (${sampleHabitCompletions.length} completions)`);
+  } catch (error) {
+    console.error('❌ Error populating habit completions:', error.message);
+    throw error;
+  }
 };
 
 const populateReminders = async () => {
-  console.log('⏰ Simulating reminders population...');
-  console.log(`   - Clearing existing reminders collection`);
-  console.log(`   - Inserting ${sampleReminders.length} reminders:`);
-  sampleReminders.forEach(reminder => {
-    console.log(`     • ${reminder.habitId} at ${reminder.timeOfDay} (${reminder.isEnabled ? 'Enabled' : 'Disabled'})`);
-  });
-  await new Promise(resolve => setTimeout(resolve, 300));
-  console.log('✅ Reminders populated successfully (SIMULATED)');
+  try {
+    console.log('⏰ Populating reminders...');
+    await Reminder.deleteMany({}); // Clear existing reminders
+    await Reminder.insertMany(sampleReminders);
+    console.log(`✅ Reminders populated successfully (${sampleReminders.length} reminders)`);
+  } catch (error) {
+    console.error('❌ Error populating reminders:', error.message);
+    throw error;
+  }
 };
 
 const populateReports = async () => {
-  console.log('📊 Simulating reports population...');
-  console.log(`   - Clearing existing reports collection`);
-  console.log(`   - Inserting ${sampleReports.length} reports:`);
-  sampleReports.forEach(report => {
-    console.log(`     • ${report.userId} - ${report.completionRate}% completion (${report.dateRange})`);
-  });
-  await new Promise(resolve => setTimeout(resolve, 400));
-  console.log('✅ Reports populated successfully (SIMULATED)');
+  try {
+    console.log('📊 Populating reports...');
+    await Report.deleteMany({}); // Clear existing reports
+    await Report.insertMany(sampleReports);
+    console.log(`✅ Reports populated successfully (${sampleReports.length} reports)`);
+  } catch (error) {
+    console.error('❌ Error populating reports:', error.message);
+    throw error;
+  }
 };
 
 // This is the main function that runs everything
 // It calls all the individual populate functions in the right order
 const populateDatabase = async () => {
+  let connection;
   try {
     console.log('🚀 Starting database population...\n');
     
-    // First, connect to the database (or simulate the connection)
-    await connectDB();
+    // First, connect to the database
+    connection = await connectDB();
     
     // Populate collections in order - users first, then things that depend on users
     await populateUsers(); // Start with users - everything else depends on them
@@ -371,10 +377,10 @@ const populateDatabase = async () => {
     await populateReminders(); // Reminder settings for habits
     await populateReports(); // Finally, analytics reports based on their activity
     
-    console.log('\n🎉 Database population completed successfully! (SIMULATED)');
+    console.log('\n🎉 Database population completed successfully!');
     
-    // Display simulated summary
-    console.log('\n📊 Simulated Summary:');
+    // Display summary of populated data
+    console.log('\n📊 Population Summary:');
     console.log(`Users: ${sampleUsers.length}`);
     console.log(`Auth Tokens: ${sampleAuthTokens.length}`);
     console.log(`Subscriptions: ${sampleSubscriptions.length}`);
@@ -383,14 +389,14 @@ const populateDatabase = async () => {
     console.log(`Reminders: ${sampleReminders.length}`);
     console.log(`Reports: ${sampleReports.length}`);
     
-    console.log('\n💡 Note: This was a simulation. No actual database operations were performed.');
-    console.log('   To use with real MongoDB, update the connectDB function and population methods.');
-    
   } catch (error) {
-    console.error('❌ Error in simulation:', error);
+    console.error('❌ Error populating database:', error);
   } finally {
-    console.log('\n🔐 Simulation completed');
-    process.exit(0); // Exit the script when done
+    if (connection) {
+      console.log('\n🔌 Closing database connection...');
+      await connection.disconnect();
+    }
+    process.exit(0);
   }
 };
 
