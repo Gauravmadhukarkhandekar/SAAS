@@ -7,7 +7,7 @@ require('dotenv').config();
 const app = express();
 
 // Middleware
-app.use(cors());
+app.use(cors({ origin: ['http://localhost:3000'] }));
 app.use(express.json());
 
 // MongoDB Connection
@@ -16,12 +16,25 @@ mongoose.connect(process.env.MONGODB_URI)
   .catch(err => console.error('MongoDB connection error:', err));
 
 // Routes
-app.use('/api/habits', require('../routes/habit.js'));
-app.use('/api/habitLogs', require('../routes/habitLog.js'));
+app.use('/api/habits', require('./routes/habit.js'));
+app.use('/api/habitLogs', require('./routes/habitLog.js'));
 
 // Health check endpoint
 app.get('/api/health', (req, res) => {
   res.json({ message: 'Server is running' });
+});
+
+// API root endpoint
+app.get('/api', (req, res) => {
+  res.json({
+    message: 'API root',
+    endpoints: ['/api/health', '/api/habits', '/api/habitLogs']
+  });
+});
+
+// Root endpoint
+app.get('/', (req, res) => {
+  res.send('API is running');
 });
 
 const PORT = process.env.PORT || 5000;

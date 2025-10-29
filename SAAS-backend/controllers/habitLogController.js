@@ -1,4 +1,4 @@
-const HabitLog = require('../models/habitLog');
+const HabitLog = require('../models/HabitLog');
 
 exports.getHabitLogs = async (req, res) => {
   try {
