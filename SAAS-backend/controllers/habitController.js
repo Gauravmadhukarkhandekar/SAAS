@@ -1,5 +1,22 @@
 const Habit = require('../models/Habit');
 
+exports.getAll = async (req, res) => {
+  try {
+    const habits = await Habit.find({}).sort({ createdAt: -1 });
+    res.status(200).json({
+      success: true,
+      count: habits.length,
+      data: habits
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: 'Error fetching all habits',
+      error: error.message
+    });
+  }
+};
+
 exports.getAllHabits = async (req, res) => {
   try {
     const userId = req.params.userId;

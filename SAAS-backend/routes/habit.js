@@ -2,19 +2,8 @@ const express = require('express');
 const router = express.Router();
 const habitController = require('../controllers/habitController');
 
-// Index for habits router
-router.get('/', (req, res) => {
-  res.json({
-    message: 'Habits API',
-    endpoints: [
-      'GET /user/:userId',
-      'GET /:id',
-      'POST /',
-      'PUT /:id',
-      'DELETE /:id'
-    ]
-  });
-});
+// GET all habits
+router.get('/', habitController.getAll);
 
 // GET all habits for a user
 // URL: GET /api/habits/user/:userId
