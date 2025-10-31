@@ -36,14 +36,17 @@ body {
 }
 
 .nav-container {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 0 20px;
+  max-width: 100%; /* allow full width so logo can sit at the corner */
+  margin: 0;
+  padding: 0; /* base reset */
   display: flex;
   justify-content: space-between;
   align-items: center;
   height: 70px;
 }
+
+/* Add a small offset from the left edge */
+.nav-container { padding-left: 12px; }
 
 .nav-logo h2 {
   color: #1f2937;
@@ -51,10 +54,26 @@ body {
   font-weight: 700;
 }
 
+/* Make logo clickable and aligned with image */
+.nav-logo a {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+  color: #1f2937;
+}
+
+/* Emoji logo sizing */
+.nav-emoji {
+  font-size: 24px;
+  line-height: 1;
+  display: inline-block;
+}
+
 .nav-menu {
   display: flex;
   align-items: center;
-  gap: 2rem;
+  gap: 2.5rem; /* add more space between items */
 }
 
 .nav-link {
@@ -62,6 +81,7 @@ body {
   color: #666;
   font-weight: 500;
   transition: color 0.3s ease;
+  padding: 8px 10px; /* increase clickable area and spacing */
 }
 
 .nav-link:hover {
@@ -72,11 +92,12 @@ body {
   background: linear-gradient(135deg, #10b981 0%, #3b82f6 100%);
   color: white;
   border: none;
-  padding: 12px 24px;
+  padding: 12px 28px; /* slightly wider button */
   border-radius: 50px;
   font-weight: 600;
   cursor: pointer;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
+  margin-left: 1rem; /* add separation from the last link */
 }
 
 .nav-btn:hover {
@@ -655,7 +676,7 @@ body {
   }
   
   .nav-menu {
-    gap: 1rem;
+    gap: 1rem; /* keep tighter on mobile */
   }
   
   .nav-link {

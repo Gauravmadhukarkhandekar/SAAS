@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { BrowserRouter, Routes, Route, useNavigate } from "react-router-dom";
+import { BrowserRouter, Routes, Route, useNavigate, Link, useLocation } from "react-router-dom";
 import Dashboard from "./pages/dashboard";
 import EditHabit from "./pages/editHabit";
 import UserProfile from './pages/userProfile';
@@ -8,6 +8,7 @@ import './App.css';
 function Home() {
   const [message, setMessage] = useState('Loading backend...');
   const navigate = useNavigate();
+  const location = useLocation();
 
   useEffect(() => {
     fetch('http://localhost:3001/api')
@@ -16,13 +17,28 @@ function Home() {
       .catch((err) => setMessage(`Failed to reach backend: ${err?.message || 'Unknown error'}`));
   }, []);
 
+  // Smooth-scroll to hero when navigating to /#top
+  useEffect(() => {
+    if (location.hash === '#top') {
+      const el = document.getElementById('top');
+      if (el) {
+        el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      } else {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+    }
+  }, [location]);
+
   return (
     <div className="App">
       {/* Navigation */}
       <nav className="navbar">
         <div className="nav-container">
           <div className="nav-logo">
-            <h2>BetterMe</h2>
+            <Link to="/#top" aria-label="BetterMe Home">
+              <span className="nav-emoji" role="img" aria-label="BetterMe logo">🎯</span>
+              <h2>BetterMe</h2>
+            </Link>
           </div>
           <div className="nav-menu">
             <a href="#features" className="nav-link">Features</a>
@@ -34,7 +50,7 @@ function Home() {
       </nav>
 
       {/* Hero Section */}
-      <section className="hero">
+      <section id="top" className="hero">
         <div className="hero-container">
           <div className="hero-content">
             <h1 className="hero-title">
