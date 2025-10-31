@@ -1,7 +1,9 @@
 import { useEffect, useState } from 'react';
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import Dashboard from "./pages/dashboard";
 import './App.css';
 
-function App() {
+function Home() {
   const [message, setMessage] = useState('Loading backend...');
 
   useEffect(() => {
@@ -17,7 +19,7 @@ function App() {
       <nav className="navbar">
         <div className="nav-container">
           <div className="nav-logo">
-            <h2>🎯 BetterMe</h2>
+            <h2>BetterMe</h2>
           </div>
           <div className="nav-menu">
             <a href="#features" className="nav-link">Features</a>
@@ -353,5 +355,18 @@ function App() {
     </div>
   );
 }
+
+// App = router that switches between pages
+function App() {
+  return (
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/dashboard" element={<Dashboard />} />
+      </Routes>
+    </BrowserRouter>
+  );
+}
+
 
 export default App;
