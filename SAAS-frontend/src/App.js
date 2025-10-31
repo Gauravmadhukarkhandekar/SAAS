@@ -1,10 +1,13 @@
 import { useEffect, useState } from 'react';
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, useNavigate } from "react-router-dom";
 import Dashboard from "./pages/dashboard";
+import EditHabit from "./pages/editHabit";
+import UserProfile from './pages/userProfile';
 import './App.css';
 
 function Home() {
   const [message, setMessage] = useState('Loading backend...');
+  const navigate = useNavigate();
 
   useEffect(() => {
     fetch('http://localhost:3001/api')
@@ -25,7 +28,7 @@ function Home() {
             <a href="#features" className="nav-link">Features</a>
             <a href="#pricing" className="nav-link">Pricing</a>
             <a href="#about" className="nav-link">About</a>
-            <button className="nav-btn">Get Started</button>
+            <button className="nav-btn" onClick={() => navigate('/dashboard')}>Get Started</button>
           </div>
         </div>
       </nav>
@@ -363,6 +366,8 @@ function App() {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="/edit-habit/:habitId" element={<EditHabit />} />
+        <Route path="/user-profile" element={<UserProfile/>} />
       </Routes>
     </BrowserRouter>
   );

@@ -1,38 +1,27 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import "../styles/buttons.css";
 import HabitModal from "../components/HabitModal";
+import { PencilSquare, PersonCircle } from 'react-bootstrap-icons';
+import { useNavigate } from 'react-router-dom';
 
 const Dashboard = () => {
-  const [habits, setHabits] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState("");
+  const [showHabitModal, setShowHabitModal] = useState(false);
+  const navigate = useNavigate();
+  const habits = [
+    { id: "h1", name: "Morning Meditation", streak: "🔥 7" },
+    { id: "h2", name: "Read for 30 minutes", streak: "🔥 12" },
+    { id: "h3", name: "Exercise", streak: "🔥 5" }
+  ];
+  const [completed, setCompleted] = useState([]);
+  const totalHabits = habits.length;
+  const completedCount = completed.length;
+  const progress = (completedCount / totalHabits) * 100;
 
-  useEffect(() => {
-    const controller = new AbortController();
-    async function loadHabits() {
-      try {
-        setLoading(true);
-        setError("");
-        const res = await fetch("http://localhost:5000/api/habits", { signal: controller.signal });
-        if (!res.ok) {
-          const txt = await res.text();
-          throw new Error(txt || `Failed to fetch habits (${res.status})`);
-        }
-        const data = await res.json();
-        // Accept either an array or an object with a 'habits' property
-        const items = Array.isArray(data) ? data : (data?.habits ?? []);
-        setHabits(items);
-      } catch (err) {
-        if (err.name !== "AbortError") {
-          setError(err.message || "Failed to load habits.");
-        }
-      } finally {
-        setLoading(false);
-      }
-    }
-    loadHabits();
-    return () => controller.abort();
-  }, []);
+  const toggleHabit = (id) => {
+    setCompleted((prev) =>
+      prev.includes(id) ? prev.filter((h) => h !== id) : [...prev, id]
+    );
+  };
   return (
     <main className="container py-4">
       <div className="row justify-content-center">
@@ -42,7 +31,35 @@ const Dashboard = () => {
             <div className="d-flex align-items-center gap-2">
               <span className="fw-bold">BetterMe</span>
             </div>
-            <span className="badge text-bg-light border">Free Plan</span>
+            <div className="d-flex align-items-center gap-2">
+              <span className="badge text-bg-light border">Free Plan</span>
+              <div className="dropdown">
+                <button
+                  className="btn p-0 border-0 bg-transparent"
+                  id="userMenu"
+                  data-bs-toggle="dropdown"
+                  aria-expanded="false"
+                >
+                  <PersonCircle size={24} className="text-secondary" />
+                </button>
+                <ul className="dropdown-menu dropdown-menu-end" aria-labelledby="userMenu">
+                  <li>
+                    <button className="dropdown-item" onClick={() => navigate('/user-profile')}>
+                      View Profile
+                    </button>
+                  </li>
+                  <li>
+                    <button className="dropdown-item" onClick={() => navigate('/upgrade')}>
+                      Upgrade
+                    </button>
+                  </li>
+                  <li><hr className="dropdown-divider" /></li>
+                  <li>
+                    <button className="dropdown-item" onClick={() => navigate('/')}>Log Out</button>
+                  </li>
+                </ul>
+              </div>
+            </div>
           </div>
 
           {/* GRID SAMPLE: two cards side by side on md+ */}
@@ -53,9 +70,9 @@ const Dashboard = () => {
                   <div className="d-flex align-items-center gap-2 mb-1">
                     <span className="text-muted small">Today&apos;s Progress</span>
                   </div>
-                  <div className="display-6 fw-bold">0/4</div>
-                  <div className="progress mt-3" role="progressbar" aria-label="Daily progress" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">
-                    <div className="progress-bar" style={{ width: "0%" }} />
+                  <div className="display-6 fw-bold">{`${completedCount}/${totalHabits}`}</div>
+                  <div className="progress mt-3" role="progressbar" aria-label="Daily progress" aria-valuenow={progress} aria-valuemin="0" aria-valuemax="100">
+                    <div className="progress-bar bg-success" style={{ width: `${progress}%` }} />
                   </div>
                 </div>
               </div>
@@ -74,7 +91,7 @@ const Dashboard = () => {
           {/* Section header with Add Habit button */}
           <div className="d-flex align-items-center justify-content-between mb-2">
             <h2 className="h5 mb-0">Today&apos;s Habits</h2>
-            <button className="btn btn-custom btn-custom-sm" data-bs-toggle="modal" data-bs-target="#addHabitModal">+ Add Habit</button>
+            <button className="btn btn-custom btn-custom-sm" onClick={() => setShowHabitModal(true)}>+ Add Habit</button>
           </div>
 
           {/* Habits card */}
@@ -82,38 +99,40 @@ const Dashboard = () => {
             <div className="card-body">
               <div className="d-flex align-items-center justify-content-between mb-2">
                 <div className="text-muted small">Daily Progress</div>
-                <div className="text-muted small">0%</div>
+                <div className="text-muted small">{`${Math.round(progress)}%`}</div>
               </div>
 
-              <div className="progress mb-3" role="progressbar" aria-label="Daily progress bar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">
-                <div className="progress-bar bg-success" style={{ width: "0%" }} />
+              <div className="progress mb-3" role="progressbar" aria-label="Daily progress bar" aria-valuenow={progress} aria-valuemin="0" aria-valuemax="100">
+                <div className="progress-bar bg-success" style={{ width: `${progress}%` }} />
               </div>
 
-              {loading && <div className="text-center py-3 text-muted small">Loading habits…</div>}
-              {error && <div className="alert alert-danger mb-0">{error}</div>}
-              {!loading && !error && habits.length === 0 && (
-                <div className="text-center py-3 text-muted small">No habits yet. Click “+ Add Habit”.</div>
-              )}
-              {!loading && !error && habits.length > 0 && (
-                <ul className="list-group list-group-flush">
-                  {habits.map((h, i) => {
-                    const name = h.name || h.title || h.habitName || "Habit";
-                    const streak = typeof h.streak === "number" ? h.streak : (h?.stats?.streak ?? 0);
-                    const id = h.id || h._id || `habit-${i}`;
-                    return (
-                      <li key={id} className="list-group-item d-flex align-items-center justify-content-between">
-                        <div className="form-check">
-                          <input className="form-check-input me-2" type="checkbox" id={`habit-${i}`} />
-                          <label className="form-check-label" htmlFor={`habit-${i}`}>
-                            {name}
-                          </label>
-                        </div>
-                        <span className="badge rounded-pill text-bg-light border">{streak}</span>
-                      </li>
-                    );
-                  })}
-                </ul>
-              )}
+              <ul className="list-group list-group-flush">
+                {habits.map((h, i) => (
+                  <li key={h.id || i} className="list-group-item d-flex align-items-center justify-content-between">
+                    <div className="form-check">
+                      <input
+                        className="form-check-input me-2"
+                        type="checkbox"
+                        id={`habit-${i}`}
+                        checked={completed.includes(h.id)}
+                        onChange={() => toggleHabit(h.id)}
+                      />
+                      <label className="form-check-label" htmlFor={`habit-${i}`}>
+                        {h.name}
+                      </label>
+                    </div>
+                    <div className="d-flex align-items-center gap-2">
+                      <span className="badge rounded-pill text-bg-light border">{h.streak}</span>
+                      <button
+                        className="btn btn-outline-secondary btn-sm d-flex align-items-center"
+                        onClick={() => navigate(`/edit-habit/${h.id}`)}
+                      >
+                        <PencilSquare size={16} />
+                      </button>
+                    </div>
+                  </li>
+                ))}
+              </ul>
             </div>
           </div>
 
@@ -127,7 +146,7 @@ const Dashboard = () => {
               <button className="btn btn-custom">Upgrade</button>
             </div>
           </div>
-          <HabitModal />
+          <HabitModal show={showHabitModal} onClose={() => setShowHabitModal(false)} />
         </div>
       </div>
     </main>
