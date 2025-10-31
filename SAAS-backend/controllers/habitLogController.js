@@ -1,4 +1,21 @@
-const HabitLog = require('../models/habitLog');
+const HabitLog = require('../models/HabitLog');
+
+exports.getAll = async (req, res) => {
+  try {
+    const logs = await HabitLog.find({}).sort({ completedDate: -1 });
+    res.status(200).json({
+      success: true,
+      count: logs.length,
+      data: logs
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: 'Error fetching all habit logs',
+      error: error.message
+    });
+  }
+};
 
 exports.getHabitLogs = async (req, res) => {
   try {

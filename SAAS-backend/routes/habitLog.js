@@ -1,6 +1,9 @@
 const express = require('express');
 const router = express.Router();
-const habitLogController = require('../controllers/HabitLogController');
+const habitLogController = require('../controllers/habitLogController');
+
+// GET all habit logs
+router.get('/', habitLogController.getAll);
 
 // GET all logs for a specific habit
 // URL: GET /api/habitLogs/habit/:habitId
