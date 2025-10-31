@@ -3,6 +3,7 @@ import { BrowserRouter, Routes, Route, useNavigate, Link, useLocation } from "re
 import Dashboard from "./pages/dashboard";
 import EditHabit from "./pages/editHabit";
 import UserProfile from './pages/userProfile';
+import About from './pages/about';
 import './App.css';
 
 function Home() {
@@ -43,7 +44,7 @@ function Home() {
           <div className="nav-menu">
             <a href="#features" className="nav-link">Features</a>
             <a href="#pricing" className="nav-link">Pricing</a>
-            <a href="#about" className="nav-link">About</a>
+            <Link to="/about" className="nav-link">About</Link>
             <button className="nav-btn" onClick={() => navigate('/dashboard')}>Get Started</button>
           </div>
         </div>
@@ -384,6 +385,7 @@ function App() {
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/edit-habit/:habitId" element={<EditHabit />} />
         <Route path="/user-profile" element={<UserProfile/>} />
+        <Route path="/about" element={<About />} />
       </Routes>
     </BrowserRouter>
   );

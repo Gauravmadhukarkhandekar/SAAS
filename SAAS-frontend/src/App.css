@@ -716,3 +716,61 @@ body {
     grid-template-columns: 1fr;
   }
 }
+
+/* About Page */
+.about-hero {
+  background: linear-gradient(135deg, #8b5cf6 0%, #3b82f6 50%, #10b981 100%);
+  color: white;
+  padding: 6rem 0 4rem;
+  margin-top: 70px; /* account for fixed navbar */
+  text-align: center;
+}
+
+.about-subtitle {
+  font-size: 1.1rem;
+  opacity: 0.9;
+  margin-top: 0.75rem;
+}
+
+.about-section {
+  padding: 4rem 0;
+  background: #f8fafc;
+}
+
+.about-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.5rem;
+}
+
+.about-grid.three {
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+}
+
+.about-card {
+  background: #fff;
+  border-radius: 16px;
+  padding: 1.5rem;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.06);
+  border: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.about-card h3, .about-card h4 {
+  color: #1f2937;
+  margin-bottom: 0.5rem;
+}
+
+.about-card p {
+  color: #4b5563;
+}
+
+.about-list {
+  margin-left: 1.2rem;
+  color: #4b5563;
+  line-height: 1.8;
+}
+
+.about-cta {
+  text-align: center;
+  padding: 4rem 0 6rem;
+}
