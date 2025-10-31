@@ -25,3 +25,4 @@
 - GET `/api/health` → `{ message: "Server is running" }`
 - Habits API: `/api/habits`
 - Habit Logs API: `/api/habitLogs`
+
