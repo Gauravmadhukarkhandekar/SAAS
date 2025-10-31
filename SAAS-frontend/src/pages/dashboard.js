@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "../styles/buttons.css";
 import HabitModal from "../components/HabitModal";
 import { PencilSquare, PersonCircle } from 'react-bootstrap-icons';
@@ -7,6 +7,47 @@ import { useNavigate } from 'react-router-dom';
 const Dashboard = () => {
   const [showHabitModal, setShowHabitModal] = useState(false);
   const navigate = useNavigate();
+  const [user, setUser] = useState(null);
+
+  // Check authentication on mount
+  useEffect(() => {
+    const token = localStorage.getItem('authToken');
+    const userData = localStorage.getItem('user');
+
+    if (!token || !userData) {
+      navigate('/login');
+      return;
+    }
+
+    // Verify token is still valid
+    fetch('http://localhost:5000/api/auth/verify', {
+      headers: {
+        'Authorization': `Bearer ${token}`
+      }
+    })
+      .then(res => res.json())
+      .then(data => {
+        if (data.valid) {
+          setUser(data.user);
+          localStorage.setItem('user', JSON.stringify(data.user));
+        } else {
+          localStorage.removeItem('authToken');
+          localStorage.removeItem('user');
+          navigate('/login');
+        }
+      })
+      .catch(() => {
+        localStorage.removeItem('authToken');
+        localStorage.removeItem('user');
+        navigate('/login');
+      });
+  }, [navigate]);
+
+  const handleLogout = () => {
+    localStorage.removeItem('authToken');
+    localStorage.removeItem('user');
+    navigate('/login');
+  };
   const habits = [
     { id: "h1", name: "Morning Meditation", streak: "🔥 7" },
     { id: "h2", name: "Read for 30 minutes", streak: "🔥 12" },
@@ -32,17 +73,33 @@ const Dashboard = () => {
               <span className="fw-bold">BetterMe</span>
             </div>
             <div className="d-flex align-items-center gap-2">
-              <span className="badge text-bg-light border">Free Plan</span>
+              <span className="badge text-bg-light border">
+                {user?.isPro ? 'Premium Plan' : 'Free Plan'}
+              </span>
               <div className="dropdown">
                 <button
-                  className="btn p-0 border-0 bg-transparent"
+                  className="btn p-0 border-0 bg-transparent d-flex align-items-center gap-2"
                   id="userMenu"
                   data-bs-toggle="dropdown"
                   aria-expanded="false"
                 >
                   <PersonCircle size={24} className="text-secondary" />
+                  {user && (
+                    <span className="d-none d-md-inline text-secondary small">
+                      {user.name}
+                    </span>
+                  )}
                 </button>
                 <ul className="dropdown-menu dropdown-menu-end" aria-labelledby="userMenu">
+                  {user && (
+                    <li>
+                      <div className="dropdown-item-text">
+                        <div className="fw-semibold">{user.name}</div>
+                        <div className="small text-muted">{user.email}</div>
+                      </div>
+                    </li>
+                  )}
+                  <li><hr className="dropdown-divider" /></li>
                   <li>
                     <button className="dropdown-item" onClick={() => navigate('/user-profile')}>
                       View Profile
@@ -55,7 +112,7 @@ const Dashboard = () => {
                   </li>
                   <li><hr className="dropdown-divider" /></li>
                   <li>
-                    <button className="dropdown-item" onClick={() => navigate('/')}>Log Out</button>
+                    <button className="dropdown-item" onClick={handleLogout}>Log Out</button>
                   </li>
                 </ul>
               </div>

@@ -4,12 +4,30 @@ import Dashboard from "./pages/dashboard";
 import EditHabit from "./pages/editHabit";
 import UserProfile from './pages/userProfile';
 import About from './pages/about';
+import Login from './pages/login';
+import Register from './pages/register';
 import './App.css';
 
 function Home() {
   const [message, setMessage] = useState('Loading backend...');
   const navigate = useNavigate();
   const location = useLocation();
+  const [user, setUser] = useState(null);
+
+  // Check if user is logged in (also check when location changes)
+  useEffect(() => {
+    const userData = localStorage.getItem('user');
+    if (userData) {
+      try {
+        setUser(JSON.parse(userData));
+      } catch (e) {
+        // Invalid user data
+        setUser(null);
+      }
+    } else {
+      setUser(null);
+    }
+  }, [location.pathname]);
 
   useEffect(() => {
     fetch('http://localhost:3001/api')
@@ -45,7 +63,14 @@ function Home() {
             <a href="#features" className="nav-link">Features</a>
             <a href="#pricing" className="nav-link">Pricing</a>
             <Link to="/about" className="nav-link">About</Link>
-            <button className="nav-btn" onClick={() => navigate('/dashboard')}>Get Started</button>
+            {user ? (
+              <div className="d-flex align-items-center gap-2">
+                <span className="text-muted small d-none d-md-inline">Welcome, {user.name}!</span>
+                <button className="nav-btn" onClick={() => navigate('/dashboard')}>Dashboard</button>
+              </div>
+            ) : (
+              <button className="nav-btn" onClick={() => navigate('/login')}>Get Started</button>
+            )}
           </div>
         </div>
       </nav>
@@ -382,6 +407,8 @@ function App() {
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<Home />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/edit-habit/:habitId" element={<EditHabit />} />
         <Route path="/user-profile" element={<UserProfile/>} />

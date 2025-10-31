@@ -1,38 +1,114 @@
 
-
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
 const UserProfile = () => {
   const navigate = useNavigate();
-
-  // Prefill with demo values; replace with real user data when wiring auth
+  const [user, setUser] = useState(null);
   const [form, setForm] = useState({
-    username: "anushka",
-    email: "anushka@example.com",
+    name: "",
+    email: "",
     password: "********", // hidden
     plan: "Free",
   });
   const [saving, setSaving] = useState(false);
   const [msg, setMsg] = useState("");
+  const [loading, setLoading] = useState(true);
+
+  // Get logged-in user data
+  useEffect(() => {
+    const userData = localStorage.getItem('user');
+    const token = localStorage.getItem('authToken');
+    
+    if (!token || !userData) {
+      navigate('/login');
+      return;
+    }
+
+    try {
+      const userObj = JSON.parse(userData);
+      setUser(userObj);
+      setForm({
+        name: userObj.name || "",
+        email: userObj.email || "",
+        password: "********", // hidden
+        plan: userObj.isPro ? "Premium" : "Free",
+      });
+      setLoading(false);
+    } catch (e) {
+      navigate('/login');
+    }
+  }, [navigate]);
 
   const onChange = (e) => {
     const { name, value } = e.target;
     setForm((f) => ({ ...f, [name]: value }));
   };
 
-  const onSubmit = (e) => {
+  const onSubmit = async (e) => {
     e.preventDefault();
     setSaving(true);
     setMsg("");
-    // Simulate save
-    setTimeout(() => {
-      // Persist locally so dashboard/profile can read if needed
-      localStorage.setItem("userProfile", JSON.stringify(form));
+
+    try {
+      const token = localStorage.getItem('authToken');
+      
+      if (!token) {
+        navigate('/login');
+        return;
+      }
+
+      // Update profile in MongoDB via backend API
+      const response = await fetch('http://localhost:5000/api/auth/profile', {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify({
+          name: form.name,
+          email: form.email,
+          isPro: form.plan === "Premium"
+        }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.message || 'Failed to update profile');
+      }
+
+      // Update localStorage with fresh data from backend
+      localStorage.setItem('user', JSON.stringify(data.user));
+      setUser(data.user);
+      setForm({
+        ...form,
+        name: data.user.name,
+        email: data.user.email,
+        plan: data.user.isPro ? "Premium" : "Free"
+      });
+      
       setSaving(false);
-      setMsg("Profile saved.");
-    }, 400);
+      setMsg("Profile saved successfully!");
+    } catch (error) {
+      setSaving(false);
+      setMsg(error.message || "Failed to save profile. Please try again.");
+    }
   };
+
+  if (loading) {
+    return (
+      <main className="container py-4">
+        <div className="col-12 col-lg-6 mx-auto">
+          <div className="text-center py-5">
+            <div className="spinner-border text-primary" role="status">
+              <span className="visually-hidden">Loading...</span>
+            </div>
+          </div>
+        </div>
+      </main>
+    );
+  }
 
   return (
     <main className="container py-4">
@@ -45,16 +121,17 @@ const UserProfile = () => {
         <div className="card shadow-sm">
           <div className="card-body">
             <form onSubmit={onSubmit}>
-              {/* Username */}
+              {/* Name */}
               <div className="mb-3">
-                <label className="form-label">Username</label>
+                <label className="form-label">Name</label>
                 <input
                   type="text"
                   className="form-control"
-                  name="username"
-                  value={form.username}
+                  name="name"
+                  value={form.name}
                   onChange={onChange}
-                  placeholder="your username"
+                  placeholder="your name"
+                  required
                 />
               </div>
 
