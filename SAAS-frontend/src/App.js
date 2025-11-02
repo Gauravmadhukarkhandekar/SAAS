@@ -10,7 +10,9 @@ import Subscription from './pages/subscription';
 import HabitLogs from './pages/habitlogs';
 import Reports from './pages/reports';
 import Reminders from './pages/reminders';
+import AddHabit from './pages/addHabit';
 import './App.css';
+import './styles/addHabit.css';
 
 function Home() {
   const [message, setMessage] = useState('Loading backend...');
@@ -84,7 +86,7 @@ function Home() {
                 <button className="nav-link nav-link-btn" onClick={() => navigate('/dashboard')}>Dashboard</button>
                 <button className="nav-link nav-link-btn" onClick={() => navigate('/subscription')}>Subscription</button>
                 <button className="nav-link nav-link-btn" onClick={() => navigate('/habitlogs')}>Habit Logs</button>
-                <button className="nav-link nav-link-btn" onClick={() => { navigate('/dashboard'); setTimeout(() => { const addBtn = document.querySelector('.btn.btn-primary'); if (addBtn && addBtn.textContent.includes('Add')) addBtn.click(); }, 100); }}>Add Habits</button>
+                <button className="nav-link nav-link-btn" onClick={() => navigate('/add-habit')}>Add Habits</button>
                 <button className="nav-link nav-link-btn" onClick={() => navigate('/reports')}>Reports</button>
                 <button className="nav-link nav-link-btn" onClick={() => navigate('/reminders')}>Reminders</button>
               </>
@@ -110,7 +112,7 @@ function Home() {
                   <div className="dropdown-item" onClick={() => { navigate('/habitlogs'); setShowUserMenu(false); }}>
                     📝 Habit Logs
                   </div>
-                  <div className="dropdown-item" onClick={() => { navigate('/dashboard'); setShowUserMenu(false); }}>
+                  <div className="dropdown-item" onClick={() => { navigate('/add-habit'); setShowUserMenu(false); }}>
                     ➕ Add Habits
                   </div>
                   <div className="dropdown-item" onClick={() => { navigate('/reports'); setShowUserMenu(false); }}>
@@ -523,6 +525,7 @@ function App() {
         <Route path="/habitlogs" element={<HabitLogs />} />
         <Route path="/reports" element={<Reports />} />
         <Route path="/reminders" element={<Reminders />} />
+        <Route path="/add-habit" element={<AddHabit />} />
       </Routes>
     </BrowserRouter>
   );
