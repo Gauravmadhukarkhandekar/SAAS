@@ -72,9 +72,23 @@ function Home() {
       <nav className="navbar">
         <div className="nav-container">
           <div className="nav-logo">
-            <Link to="/#top" aria-label="BetterMe Home">
-              <span className="nav-emoji" role="img" aria-label="BetterMe logo">🎯</span>
-              <h2>BetterMe</h2>
+            <Link to="/#top" aria-label="BetterMe Home" className="nav-logo-link">
+              <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                <img 
+                  src="/logo.png" 
+                  alt="BetterMe Logo" 
+                  className="nav-logo-img"
+                  style={{
+                    width: '48px',
+                    height: '48px',
+                    objectFit: 'contain',
+                    display: 'block',
+                    borderRadius: '12px',
+                    visibility: 'visible'
+                  }}
+                />
+                <h2 className="nav-logo-text">BetterMe</h2>
+              </div>
             </Link>
           </div>
           <div className="nav-menu">
@@ -147,6 +161,13 @@ function Home() {
       <section id="top" className="hero">
         <div className="hero-container">
           <div className="hero-content">
+            <div className="hero-logo-container">
+              <img 
+                src="/logo.png" 
+                alt="BetterMe Logo" 
+                className="hero-logo"
+              />
+            </div>
             <h1 className="hero-title">
               Build Better Habits with 
               <span className="gradient-text"> Smart Tracking</span>
@@ -462,7 +483,14 @@ function Home() {
         <div className="container">
           <div className="footer-content">
             <div className="footer-section">
-              <h3>BetterMe</h3>
+              <div className="footer-logo-container">
+                <img 
+                  src="/logo.png" 
+                  alt="BetterMe Logo" 
+                  className="footer-logo"
+                />
+                <h3>BetterMe</h3>
+              </div>
               <p>Empowering people to build better habits and achieve their goals.</p>
             </div>
             <div className="footer-section">
