@@ -64,10 +64,7 @@ function Home() {
             <a href="#pricing" className="nav-link">Pricing</a>
             <Link to="/about" className="nav-link">About</Link>
             {user ? (
-              <div className="d-flex align-items-center gap-2">
-                <span className="text-muted small d-none d-md-inline">Welcome, {user.name}!</span>
-                <button className="nav-btn" onClick={() => navigate('/dashboard')}>Dashboard</button>
-              </div>
+              <button className="nav-btn" onClick={() => navigate('/dashboard')}>Dashboard</button>
             ) : (
               <button className="nav-btn" onClick={() => navigate('/login')}>Get Started</button>
             )}
@@ -88,8 +85,23 @@ function Home() {
               Join thousands of users building better habits every day.
             </p>
             <div className="hero-buttons">
-              <button className="btn-primary">Start Tracking Habits</button>
-              <button className="btn-secondary">See How It Works</button>
+              <button 
+                className="btn-primary" 
+                onClick={() => navigate(user ? '/dashboard' : '/register')}
+              >
+                Start Tracking Habits
+              </button>
+              <button 
+                className="btn-secondary" 
+                onClick={() => {
+                  const featuresSection = document.getElementById('features');
+                  if (featuresSection) {
+                    featuresSection.scrollIntoView({ behavior: 'smooth' });
+                  }
+                }}
+              >
+                See How It Works
+              </button>
             </div>
             <div className="hero-stats">
               <div className="stat">
@@ -216,7 +228,12 @@ function Home() {
                   <span>Custom themes</span>
                 </div>
               </div>
-              <button className="pricing-btn free-btn">Get Started Free</button>
+              <button 
+                className="pricing-btn free-btn"
+                onClick={() => navigate(user ? '/dashboard' : '/register')}
+              >
+                Get Started Free
+              </button>
             </div>
 
             {/* Premium Plan */}
@@ -273,7 +290,12 @@ function Home() {
                   <span>Priority support</span>
                 </div>
               </div>
-              <button className="pricing-btn premium-btn">Start Premium Trial</button>
+              <button 
+                className="pricing-btn premium-btn"
+                onClick={() => navigate(user ? '/dashboard' : '/register')}
+              >
+                Start Premium Trial
+              </button>
             </div>
 
             {/* Pro Plan */}
@@ -321,7 +343,12 @@ function Home() {
                   <span>24/7 priority support</span>
                 </div>
               </div>
-              <button className="pricing-btn pro-btn">Go Pro</button>
+              <button 
+                className="pricing-btn pro-btn"
+                onClick={() => navigate(user ? '/dashboard' : '/register')}
+              >
+                Go Pro
+              </button>
             </div>
           </div>
           
@@ -342,8 +369,18 @@ function Home() {
             <h2>Ready to Build Better Habits?</h2>
             <p>Join thousands of users who are already transforming their lives with better habits.</p>
             <div className="cta-buttons">
-              <button className="btn-primary large">Start Your Free Trial</button>
-              <button className="btn-outline large">Learn More</button>
+              <button 
+                className="btn-primary large"
+                onClick={() => navigate(user ? '/dashboard' : '/register')}
+              >
+                Start Your Free Trial
+              </button>
+              <button 
+                className="btn-outline large"
+                onClick={() => navigate('/about')}
+              >
+                Learn More
+              </button>
             </div>
           </div>
         </div>

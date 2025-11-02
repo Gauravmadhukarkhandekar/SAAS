@@ -1,18 +1,32 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 // Controlled modal: parent passes `show` and `onClose`
-const HabitModal = ({ show, onClose }) => {
+const HabitModal = ({ show, onClose, onSuccess }) => {
   const [formData, setFormData] = useState({
-    userId: "user123",
+    userId: "",
     name: "",
     description: "",
     reminder: "morning",
     frequency: "daily",
-    category: "fitness",
+    category: "health",
     isActive: true,
   });
 
   const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
+
+  // Get user ID from localStorage
+  useEffect(() => {
+    const userData = localStorage.getItem('user');
+    if (userData) {
+      try {
+        const user = JSON.parse(userData);
+        setFormData(prev => ({ ...prev, userId: user.userId }));
+      } catch (e) {
+        console.error('Error parsing user data:', e);
+      }
+    }
+  }, [show]);
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -22,24 +36,67 @@ const HabitModal = ({ show, onClose }) => {
     });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (!formData.name.trim()) {
       setError("Please enter a habit name.");
       return;
     }
+
+    if (!formData.userId) {
+      setError("User not found. Please login again.");
+      return;
+    }
+
     setError("");
-    alert(`Habit added: ${formData.name} (${formData.frequency})`);
-    setFormData({
-      userId: "user123",
-      name: "",
-      description: "",
-      reminder: "morning",
-      frequency: "daily",
-      category: "fitness",
-      isActive: true,
-    });
-    onClose?.();
+    setLoading(true);
+
+    try {
+      const response = await fetch('http://localhost:5000/api/habits', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          userId: formData.userId,
+          name: formData.name.trim(),
+          description: formData.description.trim(),
+          reminder: formData.reminder,
+          frequency: formData.frequency,
+          category: formData.category,
+          isActive: formData.isActive,
+        }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.message || 'Failed to create habit');
+      }
+
+      // Reset form
+      setFormData({
+        userId: formData.userId,
+        name: "",
+        description: "",
+        reminder: "morning",
+        frequency: "daily",
+        category: "health",
+        isActive: true,
+      });
+
+      // Call success callback if provided
+      if (onSuccess) {
+        onSuccess();
+      } else {
+        onClose?.();
+      }
+    } catch (err) {
+      console.error('Error creating habit:', err);
+      setError(err.message || 'Failed to create habit. Please try again.');
+    } finally {
+      setLoading(false);
+    }
   };
 
   if (!show) return null;
@@ -146,8 +203,21 @@ const HabitModal = ({ show, onClose }) => {
           {error && <div className="alert alert-danger py-2">{error}</div>}
 
           <div className="d-flex justify-content-end gap-2">
-            <button type="button" className="btn btn-light" onClick={onClose}>Cancel</button>
-            <button type="submit" className="btn btn-custom">Add Habit</button>
+            <button 
+              type="button" 
+              className="btn btn-light" 
+              onClick={onClose}
+              disabled={loading}
+            >
+              Cancel
+            </button>
+            <button 
+              type="submit" 
+              className="btn btn-custom"
+              disabled={loading}
+            >
+              {loading ? 'Creating...' : 'Add Habit'}
+            </button>
           </div>
         </form>
       </div>

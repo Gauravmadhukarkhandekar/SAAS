@@ -7,13 +7,20 @@ require('dotenv').config();
 const app = express();
 
 // Middleware
-app.use(cors({ origin: ['http://localhost:3000'] }));
+app.use(cors({ 
+  origin: ['http://localhost:3000', 'http://localhost:3001'],
+  credentials: true
+}));
 app.use(express.json());
 
 // MongoDB Connection
-mongoose.connect(process.env.MONGODB_URI)
+const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://127.0.0.1:27017/saas';
+mongoose.connect(MONGODB_URI)
   .then(() => console.log('Connected to MongoDB'))
-  .catch(err => console.error('MongoDB connection error:', err));
+  .catch(err => {
+    console.error('MongoDB connection error:', err);
+    console.log('Make sure MongoDB is running locally or check your MONGODB_URI in .env file');
+  });
 
 // Routes
 app.use('/api/auth', require('./routes/auth.js'));
