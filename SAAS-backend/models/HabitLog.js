@@ -19,6 +19,24 @@ const habitLogSchema = new mongoose.Schema({
     type: Boolean,
     default: false
   },
+  duration: {
+    type: Number,
+    default: 0
+  },
+  difficulty: {
+    type: String,
+    default: null
+  },
+  mood: {
+    type: String,
+    default: null
+  },
+  energyLevel: {
+    type: Number,
+    min: 1,
+    max: 10,
+    default: null
+  },
   notes: String,
   createdAt: {
     type: Date,
