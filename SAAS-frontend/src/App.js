@@ -6,6 +6,10 @@ import UserProfile from './pages/userProfile';
 import About from './pages/about';
 import Login from './pages/login';
 import Register from './pages/register';
+import Subscription from './pages/subscription';
+import HabitLogs from './pages/habitlogs';
+import Reports from './pages/reports';
+import Reminders from './pages/reminders';
 import './App.css';
 
 function Home() {
@@ -13,6 +17,7 @@ function Home() {
   const navigate = useNavigate();
   const location = useLocation();
   const [user, setUser] = useState(null);
+  const [showUserMenu, setShowUserMenu] = useState(false);
 
   // Check if user is logged in (also check when location changes)
   useEffect(() => {
@@ -48,6 +53,17 @@ function Home() {
     }
   }, [location]);
 
+  // Close dropdown when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (showUserMenu && !event.target.closest('.nav-user')) {
+        setShowUserMenu(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, [showUserMenu]);
+
   return (
     <div className="App">
       {/* Navigation */}
@@ -64,11 +80,64 @@ function Home() {
             <a href="#pricing" className="nav-link">Pricing</a>
             <Link to="/about" className="nav-link">About</Link>
             {user ? (
-              <button className="nav-btn" onClick={() => navigate('/dashboard')}>Dashboard</button>
-            ) : (
-              <button className="nav-btn" onClick={() => navigate('/login')}>Get Started</button>
-            )}
+              <>
+                <button className="nav-link nav-link-btn" onClick={() => navigate('/dashboard')}>Dashboard</button>
+                <button className="nav-link nav-link-btn" onClick={() => navigate('/subscription')}>Subscription</button>
+                <button className="nav-link nav-link-btn" onClick={() => navigate('/habitlogs')}>Habit Logs</button>
+                <button className="nav-link nav-link-btn" onClick={() => { navigate('/dashboard'); setTimeout(() => { const addBtn = document.querySelector('.btn.btn-primary'); if (addBtn && addBtn.textContent.includes('Add')) addBtn.click(); }, 100); }}>Add Habits</button>
+                <button className="nav-link nav-link-btn" onClick={() => navigate('/reports')}>Reports</button>
+                <button className="nav-link nav-link-btn" onClick={() => navigate('/reminders')}>Reminders</button>
+              </>
+            ) : null}
           </div>
+          {user ? (
+            <div className="nav-user">
+              <div className="nav-user-info" onClick={() => setShowUserMenu(!showUserMenu)}>
+                <div className="nav-user-avatar">
+                  {user.name ? user.name.charAt(0).toUpperCase() : 'U'}
+                </div>
+                <span className="nav-user-name">{user.name}</span>
+                <span className="nav-user-arrow">▼</span>
+              </div>
+              {showUserMenu && (
+                <div className="nav-user-dropdown">
+                  <div className="dropdown-item" onClick={() => { navigate('/dashboard'); setShowUserMenu(false); }}>
+                    📊 Dashboard
+                  </div>
+                  <div className="dropdown-item" onClick={() => { navigate('/subscription'); setShowUserMenu(false); }}>
+                    💎 Subscription
+                  </div>
+                  <div className="dropdown-item" onClick={() => { navigate('/habitlogs'); setShowUserMenu(false); }}>
+                    📝 Habit Logs
+                  </div>
+                  <div className="dropdown-item" onClick={() => { navigate('/dashboard'); setShowUserMenu(false); }}>
+                    ➕ Add Habits
+                  </div>
+                  <div className="dropdown-item" onClick={() => { navigate('/reports'); setShowUserMenu(false); }}>
+                    📈 Reports
+                  </div>
+                  <div className="dropdown-item" onClick={() => { navigate('/reminders'); setShowUserMenu(false); }}>
+                    🔔 Reminders
+                  </div>
+                  <div className="dropdown-item" onClick={() => { navigate('/user-profile'); setShowUserMenu(false); }}>
+                    👤 Profile
+                  </div>
+                  <div className="dropdown-divider"></div>
+                  <div className="dropdown-item logout" onClick={() => {
+                    localStorage.removeItem('authToken');
+                    localStorage.removeItem('user');
+                    setUser(null);
+                    setShowUserMenu(false);
+                    navigate('/');
+                  }}>
+                    🚪 Logout
+                  </div>
+                </div>
+              )}
+            </div>
+          ) : (
+            <button className="nav-btn" onClick={() => navigate('/login')}>Get Started</button>
+          )}
         </div>
       </nav>
 
@@ -450,6 +519,10 @@ function App() {
         <Route path="/edit-habit/:habitId" element={<EditHabit />} />
         <Route path="/user-profile" element={<UserProfile/>} />
         <Route path="/about" element={<About />} />
+        <Route path="/subscription" element={<Subscription />} />
+        <Route path="/habitlogs" element={<HabitLogs />} />
+        <Route path="/reports" element={<Reports />} />
+        <Route path="/reminders" element={<Reminders />} />
       </Routes>
     </BrowserRouter>
   );

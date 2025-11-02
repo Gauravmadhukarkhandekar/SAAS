@@ -28,7 +28,12 @@ function Login() {
       }
       navigate('/dashboard');
     } catch (err) {
-      setError(err.message || 'Login failed');
+      if (err.message === 'Failed to fetch' || err.name === 'TypeError') {
+        setError('Cannot connect to server. Please make sure the backend server is running on port 5000. Start it by running: cd SAAS-backend && npm start');
+      } else {
+        setError(err.message || 'Login failed. Please check your credentials.');
+      }
+      console.error('Login error:', err);
     } finally {
       setLoading(false);
     }
