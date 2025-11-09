@@ -60,7 +60,7 @@ exports.getHabitById = async (req, res) => {
 
 exports.createHabit = async (req, res) => {
   try {
-    const { userId, name, description, reminder, frequency, category } = req.body;
+    const { userId, name, description, reminder, frequency, category, notes } = req.body;
     if (!userId || !name) {
       return res.status(400).json({
         success: false,
@@ -73,7 +73,8 @@ exports.createHabit = async (req, res) => {
       description,
       reminder,
       frequency,
-      category
+      category,
+      notes
     });
     const savedHabit = await newHabit.save();
     res.status(201).json({

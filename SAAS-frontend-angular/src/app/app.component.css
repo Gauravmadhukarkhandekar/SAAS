@@ -1,0 +1,13 @@
+.app-shell {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: linear-gradient(135deg, #f8fafc 0%, #eef2ff 30%, #e0f2fe 60%, #fdf2f8 100%);
+}
+
+.app-main {
+  flex: 1;
+  position: relative;
+  z-index: 1;
+  padding-top: 88px;
+}

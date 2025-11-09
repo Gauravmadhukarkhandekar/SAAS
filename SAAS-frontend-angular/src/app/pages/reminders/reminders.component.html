@@ -1,0 +1,38 @@
+<section class="reminders-page">
+  <header class="reminders-header">
+    <h1>Smart Reminders Control Center</h1>
+    <p>
+      Fine-tune when, where, and how nudges arrive so habit momentum feels supportive—not
+      disruptive.
+    </p>
+  </header>
+
+  <section class="upcoming">
+    <h2>Upcoming nudges</h2>
+    <div class="reminder-grid">
+      <article class="reminder-card" *ngFor="let reminder of upcomingReminders">
+        <span class="habit-name">{{ reminder.habit }}</span>
+        <p class="reminder-time">{{ reminder.time }}</p>
+        <div class="reminder-meta">
+          <span>{{ reminder.channel }}</span>
+          <span>{{ reminder.tone }}</span>
+        </div>
+        <button type="button">Adjust cadence</button>
+      </article>
+    </div>
+  </section>
+
+  <section class="channels">
+    <h2>Channels & signal tones</h2>
+    <ul>
+      <li *ngFor="let channel of channels">
+        <div class="channel-dot"></div>
+        <div>
+          <strong>{{ channel.label }}</strong>
+          <p>{{ channel.description }}</p>
+        </div>
+        <button type="button">Configure</button>
+      </li>
+    </ul>
+  </section>
+</section>

@@ -1,0 +1,83 @@
+<section class="habit-form" *ngIf="!isLoadingHabit">
+  <header class="form-header">
+    <h1>{{ pageTitle }}</h1>
+    <p>Craft a habit blueprint with clarity, cadence, and automated nudges.</p>
+  </header>
+
+  <form [formGroup]="form" (ngSubmit)="onSubmit()" novalidate>
+    <div class="form-grid">
+      <label class="form-field">
+        <span>Habit name</span>
+        <input type="text" placeholder="Morning journaling" formControlName="name" />
+        <small class="error" *ngIf="name?.invalid && name?.touched">
+          Your habit needs a name with at least 2 characters.
+        </small>
+      </label>
+
+      <label class="form-field">
+        <span>Category</span>
+        <select formControlName="category">
+          <option *ngFor="let category of categories" [value]="category.value">
+            {{ category.label }}
+          </option>
+        </select>
+      </label>
+
+      <label class="form-field">
+        <span>Frequency</span>
+        <select formControlName="frequency">
+          <option *ngFor="let frequency of frequencies" [value]="frequency.value">
+            {{ frequency.label }}
+          </option>
+        </select>
+      </label>
+
+      <label class="form-field">
+        <span>Description (optional)</span>
+        <textarea rows="4" placeholder="Why this habit matters" formControlName="description"></textarea>
+      </label>
+    </div>
+
+    <div class="reminder-card">
+      <div class="card-headline">
+        <h3>Reminder cadence</h3>
+        <p>Choose when BetterMe should nudge you.</p>
+      </div>
+
+      <label class="form-field inline">
+        <span>Reminder window</span>
+        <select formControlName="reminder">
+          <option *ngFor="let reminder of reminders" [value]="reminder.value">
+            {{ reminder.label }}
+          </option>
+        </select>
+      </label>
+
+      <label class="switch">
+        <input type="checkbox" formControlName="isActive" />
+        <span class="slider"></span>
+        <span class="switch-label">Habit is active</span>
+      </label>
+    </div>
+
+    <label class="form-field">
+      <span>Reflection notes</span>
+      <textarea rows="5" placeholder="Add prompts, affirmations, or accountability partners" formControlName="notes"></textarea>
+    </label>
+
+    <div class="form-footer">
+      <a class="btn btn-outline" routerLink="/habits">Cancel</a>
+      <button class="btn btn-primary" type="submit" [disabled]="isSubmitting">
+        {{ isSubmitting ? 'Saving...' : habitId ? 'Update Habit' : 'Create Habit' }}
+      </button>
+    </div>
+
+    <p class="form-success" *ngIf="successMessage">{{ successMessage }}</p>
+    <p class="form-error" *ngIf="errorMessage">{{ errorMessage }}</p>
+  </form>
+</section>
+
+<div class="loading" *ngIf="isLoadingHabit">
+  <div class="spinner"></div>
+  <p>Loading habit blueprint...</p>
+</div>

@@ -1,0 +1,43 @@
+<section class="reports-page">
+  <header class="reports-header">
+    <h1>Habit Intelligence Reports</h1>
+    <p>
+      Understand patterns, energy windows, and streak health at a glance so you can coach
+      your future self with intention.
+    </p>
+  </header>
+
+  <div class="summary-grid">
+    <article class="summary-tile" *ngFor="let tile of summaryTiles">
+      <span class="tile-label">{{ tile.label }}</span>
+      <strong class="tile-value">{{ tile.value }}</strong>
+      <span class="tile-trend">{{ tile.trend }}</span>
+    </article>
+  </div>
+
+  <section class="visual-grid">
+    <article class="visual-card">
+      <h2>Momentum this week</h2>
+      <div class="line-chart">
+        <div class="chart-column" *ngFor="let point of momentumTimeline">
+          <div class="chart-bar" [style.height.%]="point.value"></div>
+          <span class="chart-label">{{ point.day }}</span>
+        </div>
+      </div>
+      <p class="chart-hint">Consistency peaked on Friday. Consider lighter tasks on Thursday.</p>
+    </article>
+
+    <article class="visual-card">
+      <h2>Habit cadence mix</h2>
+      <ul class="breakdown-list">
+        <li *ngFor="let cadence of cadenceBreakdown">
+          <span>{{ cadence.label }}</span>
+          <div class="bar">
+            <div class="bar-fill" [style.width.%]="cadence.value"></div>
+          </div>
+          <span class="value">{{ cadence.value }}%</span>
+        </li>
+      </ul>
+    </article>
+  </section>
+</section>

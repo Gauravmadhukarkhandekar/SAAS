@@ -1,0 +1,114 @@
+<section class="hero">
+  <div class="hero-content">
+    <div class="hero-text">
+      <span class="hero-pill">Habit Intelligence Platform</span>
+      <h1>Build habits that stick with <span class="highlight">BetterMe</span></h1>
+      <p>
+        Stay consistent with a beautiful dashboard, guided reflections, and smart nudges
+        that adapt to your rhythm. Your transformation starts with the next check-in.
+      </p>
+      <div class="hero-actions">
+        <a class="btn btn-primary" routerLink="/habits">Explore Dashboard</a>
+        <a class="btn btn-outline" routerLink="/register">Start Free Trial</a>
+      </div>
+      <div class="hero-stats">
+        <div class="stat-card" *ngFor="let stat of heroStats">
+          <span class="stat-value">{{ stat.value }}</span>
+          <span class="stat-label">{{ stat.label }}</span>
+        </div>
+      </div>
+    </div>
+    <div class="hero-visual">
+      <div class="glass-card progress-card">
+        <header>
+          <span class="tag">Morning Routine</span>
+          <span class="streak">12 day streak</span>
+        </header>
+        <div class="chart">
+          <div class="chart-bar" style="height: 60%"></div>
+          <div class="chart-bar" style="height: 80%"></div>
+          <div class="chart-bar" style="height: 90%"></div>
+          <div class="chart-bar" style="height: 40%"></div>
+          <div class="chart-bar" style="height: 70%"></div>
+        </div>
+        <footer>
+          <span>Progress</span>
+          <span class="percentage">78%</span>
+        </footer>
+      </div>
+      <div class="glass-card checkin-card">
+        <p>Reflection saved</p>
+        <h3>“I felt energized after journaling today.”</h3>
+        <span class="timestamp">6:30 AM · Mood: Focused</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="features" id="features">
+  <div class="section-header">
+    <span class="section-pill">Why teams love BetterMe</span>
+    <h2>Designed for lasting behavior change</h2>
+    <p>
+      Habit dashboards, coaching insights, and community support weave together so you can
+      show up for the habits that matter.
+    </p>
+  </div>
+  <div class="features-grid">
+    <article class="feature-card" *ngFor="let feature of featureCards">
+      <span class="feature-icon">{{ feature.icon }}</span>
+      <h3>{{ feature.title }}</h3>
+      <p>{{ feature.description }}</p>
+      <button class="learn-more" type="button">Learn more →</button>
+    </article>
+  </div>
+</section>
+
+<section class="workflow" id="workflow">
+  <div class="workflow-inner">
+    <div class="workflow-headline">
+      <h2>Smooth flow from intention to action</h2>
+      <p>
+        BetterMe orchestrates reflection prompts, AI insights, and calendar nudges so your
+        habits evolve with you—not against you.
+      </p>
+      <a class="btn btn-secondary" routerLink="/habits">See it in action</a>
+    </div>
+    <div class="workflow-steps">
+      <div class="workflow-step" *ngFor="let step of workflowSteps">
+        <span class="step-number">{{ step.number }}</span>
+        <div>
+          <h3>{{ step.title }}</h3>
+          <p>{{ step.description }}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="testimonials">
+  <div class="section-header">
+    <span class="section-pill">Proof of progress</span>
+    <h2>Habits that compound into confident teams</h2>
+  </div>
+  <div class="testimonial-grid">
+    <article class="testimonial" *ngFor="let testimonial of testimonials">
+      <p class="quote">“{{ testimonial.quote }}”</p>
+      <p class="author">{{ testimonial.author }}</p>
+      <p class="role">{{ testimonial.role }}</p>
+    </article>
+  </div>
+</section>
+
+<section class="cta" id="cta">
+  <div class="cta-card">
+    <div>
+      <h2>Ready to design your best habit year?</h2>
+      <p>Join thousands of teams using BetterMe to stay consistent, resilient, and inspired.</p>
+    </div>
+    <div class="cta-actions">
+      <a class="btn btn-primary" routerLink="/register">Get started free</a>
+      <a class="btn btn-outline" routerLink="/habits">Browse templates</a>
+    </div>
+  </div>
+</section>

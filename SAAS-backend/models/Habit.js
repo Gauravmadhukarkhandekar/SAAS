@@ -11,6 +11,7 @@ const habitSchema = new mongoose.Schema({
     trim: true
   },
   description: String,
+  notes: String,
   reminder: {
     type: String,
     enum: ['morning', 'afternoon', 'evening'],
