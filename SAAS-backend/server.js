@@ -13,14 +13,16 @@ const corsOptions = {
       return callback(null, true);
     }
 
-    const allowedOrigins = [
+    const allowedOrigins = new Set([
       'http://localhost:3000',
       'http://localhost:3001',
       'http://localhost:4200',
       'http://127.0.0.1:4200'
-    ];
+    ]);
 
-    if (allowedOrigins.includes(origin)) {
+    const localhostPattern = /^http:\/\/(localhost|127\.0\.0\.1)(:\d+)?$/;
+
+    if (allowedOrigins.has(origin) || localhostPattern.test(origin)) {
       return callback(null, true);
     }
 
