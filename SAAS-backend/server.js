@@ -2,38 +2,35 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
+const authRoutes = require('./routes/auth');
+const habitRoutes = require('./routes/habit');
+const habitLogRoutes = require('./routes/habitLog');
+
+
 require('dotenv').config();
 
 const app = express();
 
 // Middleware
+app.use(express.json());
 const corsOptions = {
-  origin(origin, callback) {
-    if (!origin) {
-      return callback(null, true);
-    }
-
-    const allowedOrigins = new Set([
-      'http://localhost:3000',
-      'http://localhost:3001',
-      'http://localhost:4200',
-      'http://127.0.0.1:4200'
-    ]);
-
-    const localhostPattern = /^http:\/\/(localhost|127\.0\.0\.1)(:\d+)?$/;
-
-    if (allowedOrigins.has(origin) || localhostPattern.test(origin)) {
-      return callback(null, true);
-    }
-
-    console.warn('Blocked CORS origin:', origin);
-    return callback(new Error('Not allowed by CORS'));
-  },
-  credentials: true
+  origin: 'http://localhost:4200',       // Angular dev server
+  credentials: true,                     // because your client uses withCredentials: true
+  methods: ['GET','POST','PUT','PATCH','DELETE','OPTIONS'],
+  allowedHeaders: ['Content-Type','Authorization']
 };
 
 app.use(cors(corsOptions));
-app.use(express.json());
+app.get('/health', (_req, res) => res.json({ ok: true }));
+
+app.use('/api/auth', authRoutes);
+app.use('/api/habits', habitRoutes);
+app.use('/api/habitLogs', habitLogRoutes);
+
+app.get('/api', (req, res) => {
+  res.json({ message: 'API root', endpoints: ['/api/health', '/api/habits', '/api/habitLogs'] });
+});
+app.get('/', (_req, res) => res.send('API is running'));
 
 // MongoDB Connection
 const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://127.0.0.1:27017/saas';
@@ -67,7 +64,7 @@ app.get('/', (req, res) => {
   res.send('API is running');
 });
 
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 5050;
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
