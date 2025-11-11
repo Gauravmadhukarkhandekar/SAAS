@@ -34,7 +34,7 @@ function Dashboard() {
   const loadHabits = async (userId) => {
     try {
       setLoading(true);
-      const response = await fetch(`http://localhost:5000/api/habits/user/${userId}`);
+      const response = await fetch(`http://localhost:3001/api/habits/user/${userId}`);
       
       if (!response.ok) {
         throw new Error('Failed to load habits');

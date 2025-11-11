@@ -59,7 +59,7 @@ const UserProfile = () => {
       }
 
       // Update profile in MongoDB via backend API
-      const response = await fetch('http://localhost:5000/api/auth/profile', {
+      const response = await fetch('http://localhost:3001/api/auth/profile', {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',

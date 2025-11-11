@@ -52,7 +52,7 @@ const HabitModal = ({ show, onClose, onSuccess }) => {
     setLoading(true);
 
     try {
-      const response = await fetch('http://localhost:5000/api/habits', {
+      const response = await fetch('http://localhost:3001/api/habits', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

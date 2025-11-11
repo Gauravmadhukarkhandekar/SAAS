@@ -41,7 +41,7 @@ interface HabitEntityResponse<T = HabitDetail> {
   providedIn: 'root'
 })
 export class HabitsService {
-  private readonly baseUrl = 'http://localhost:5000/api';
+  private readonly baseUrl = 'http://localhost:3001/api';
 
   constructor(
     private readonly http: HttpClient,
