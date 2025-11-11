@@ -4,7 +4,7 @@ function App() {
   const [message, setMessage] = useState('');
 
   useEffect(() => {
-    fetch('http://localhost:3001/')  // Calls your backend
+    fetch('http://localhost:5050/')  // Calls your backend
       .then(res => res.text())
       .then(data => setMessage(data))
       .catch(err => setMessage('Error connecting to backend'));

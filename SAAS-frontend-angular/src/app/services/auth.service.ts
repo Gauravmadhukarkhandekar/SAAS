@@ -18,7 +18,7 @@ export interface AuthResponse {
   providedIn: 'root'
 })
 export class AuthService {
-  private readonly baseUrl = 'http://localhost:3001/api/auth';
+  private readonly baseUrl = 'http://localhost:5050/api/auth';
   private readonly storageKey = 'betterme-auth';
   private readonly currentUserSubject = new BehaviorSubject<AuthResponse | null>(
     this.restoreSession()
