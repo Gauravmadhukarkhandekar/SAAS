@@ -27,10 +27,10 @@
         <span>Reminder</span>
         <strong>
           <ng-container *ngIf="habit.isActive !== false; else reminderPaused">
-            <ng-container [ngSwitch]="habit.reminder">
-              <span *ngSwitchCase="'morning'">Morning boost</span>
-              <span *ngSwitchCase="'afternoon'">Midday focus</span>
-              <span *ngSwitchCase="'evening'">Wind-down</span>
+            <ng-container [ngSwitch]="habit.reminderFrequency">
+              <span *ngSwitchCase="'daily'">Daily</span>
+              <span *ngSwitchCase="'weekly'">Weekly</span>
+              <span *ngSwitchCase="'monthly'">Monthly</span>
               <span *ngSwitchDefault>Not set</span>
             </ng-container>
           </ng-container>

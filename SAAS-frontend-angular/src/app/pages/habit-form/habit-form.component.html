@@ -45,19 +45,64 @@
       </div>
 
       <label class="form-field inline">
-        <span>Reminder window</span>
-        <select formControlName="reminder">
-          <option *ngFor="let reminder of reminders" [value]="reminder.value">
+        <span>Reminder frequency</span>
+        <select formControlName="reminderFrequency">
+          <option value="">None</option>
+          <option *ngFor="let reminder of reminderFrequency" [value]="reminder.value">
             {{ reminder.label }}
           </option>
         </select>
       </label>
 
-      <label class="switch">
-        <input type="checkbox" formControlName="isActive" />
-        <span class="slider"></span>
-        <span class="switch-label">Habit is active</span>
-      </label>
+            <!-- When user chooses a cadence, show the corresponding inputs -->
+            <div *ngIf="form.get('reminderFrequency')?.value as rf">
+              <!-- Daily: time only -->
+              <div *ngIf="rf === 'daily'" class="form-grid">
+                <label class="form-field">
+                  <span>Time</span>
+                  <input type="time" formControlName="reminderTime" />
+                </label>
+              </div>
+      
+              <!-- Weekly: time + days -->
+              <div *ngIf="rf === 'weekly'" class="form-grid">
+                <label class="form-field">
+                  <span>Time</span>
+                  <input type="time" formControlName="reminderTime" />
+                </label>
+      
+                <div class="form-field">
+                  <span>Days of the week</span>
+                  <div formGroupName="daysOfWeek" class="days-grid">
+                    <label class="day-pill"><input type="checkbox" formControlName="mon" /><span>Mon</span></label>
+                    <label class="day-pill"><input type="checkbox" formControlName="tue" /><span>Tue</span></label>
+                    <label class="day-pill"><input type="checkbox" formControlName="wed" /><span>Wed</span></label>
+                    <label class="day-pill"><input type="checkbox" formControlName="thu" /><span>Thu</span></label>
+                    <label class="day-pill"><input type="checkbox" formControlName="fri" /><span>Fri</span></label>
+                    <label class="day-pill"><input type="checkbox" formControlName="sat" /><span>Sat</span></label>
+                    <label class="day-pill"><input type="checkbox" formControlName="sun" /><span>Sun</span></label>
+                  </div>
+                  <small class="error" *ngIf="rf === 'weekly' && !atLeastOneDaySelected() && (form.touched || form.dirty)">
+                    Please select at least one day.
+                  </small>
+                </div>
+              </div>
+      
+              <!-- Monthly: time + day of month -->
+              <div *ngIf="rf === 'monthly'" class="form-grid">
+                <label class="form-field">
+                  <span>Time</span>
+                  <input type="time" formControlName="reminderTime" />
+                </label>
+                <label class="form-field">
+                  <span>Day of month</span>
+                  <input type="number" min="1" max="31" formControlName="dayOfMonth" />
+                  <small class="error" *ngIf="form.get('dayOfMonth')?.invalid && form.get('dayOfMonth')?.touched">
+                    Please choose a date between 1 and 31.
+                  </small>
+                </label>
+              </div>
+            </div>
     </div>
 
     <label class="form-field">

@@ -22,13 +22,14 @@ export class HabitFormComponent implements OnInit {
 
   readonly frequencies = [
     { label: 'Daily', value: 'daily' },
-    { label: 'Weekly', value: 'weekly' }
+    { label: 'Weekly', value: 'weekly' },
+    { label: 'Monthly', value: 'monthly' }
   ];
 
-  readonly reminders = [
-    { label: 'Morning boost', value: 'morning' },
-    { label: 'Midday focus', value: 'afternoon' },
-    { label: 'Wind-down', value: 'evening' }
+  readonly reminderFrequency = [
+    { label: 'Daily', value: 'daily' },
+    { label: 'Weekly', value: 'weekly' },
+    { label: 'Monthly', value: 'monthly' }
   ];
 
   form = this.fb.group({
@@ -36,8 +37,18 @@ export class HabitFormComponent implements OnInit {
     description: [''],
     category: ['health', Validators.required],
     frequency: ['daily', Validators.required],
-    reminder: ['morning'],
-    isActive: [true],
+    reminderFrequency: [''],
+    reminderTime: ['08:00'],
+    daysOfWeek: this.fb.group({
+      mon: [true],
+      tue: [false],
+      wed: [false],
+      thu: [false],
+      fri: [false],
+      sat: [false],
+      sun: [false]
+    }),
+    dayOfMonth: [1],
     notes: ['']
   });
 
@@ -66,6 +77,29 @@ export class HabitFormComponent implements OnInit {
         this.fetchHabit(id);
       }
     });
+
+    // Dynamic validation based on reminderFrequency (optional field)
+    this.form.get('reminderFrequency')?.valueChanges.subscribe((rf) => {
+      const timeCtrl = this.form.get('reminderTime');
+      const domCtrl = this.form.get('dayOfMonth');
+
+      // Clear validators first
+      timeCtrl?.clearValidators();
+      domCtrl?.clearValidators();
+
+      if (rf === 'daily') {
+        timeCtrl?.setValidators([Validators.required]);
+      } else if (rf === 'weekly') {
+        timeCtrl?.setValidators([Validators.required]);
+        // daysOfWeek selection will be checked in onSubmit()
+      } else if (rf === 'monthly') {
+        timeCtrl?.setValidators([Validators.required]);
+        domCtrl?.setValidators([Validators.required, Validators.min(1), Validators.max(31)]);
+      }
+
+      timeCtrl?.updateValueAndValidity({ emitEvent: false });
+      domCtrl?.updateValueAndValidity({ emitEvent: false });
+    });
   }
 
   onSubmit(): void {
@@ -78,18 +112,35 @@ export class HabitFormComponent implements OnInit {
     this.successMessage = '';
     this.errorMessage = '';
 
-    const { name, description, category, frequency, reminder, isActive, notes } =
+    const { name, description, category, frequency, reminderFrequency, notes } =
       this.form.value;
 
-    const payload: Partial<HabitDetail> = {
-      name: name?.trim() ?? '',
-      description: description?.trim() || undefined,
-      category: category ?? undefined,
-      frequency: frequency ?? undefined,
-      reminder: reminder ?? 'morning',
-      isActive: isActive ?? true,
-      notes: notes?.trim() || undefined
-    };
+      // If user selected a reminder cadence, enforce its specific validations
+      if (reminderFrequency) {
+        if (reminderFrequency === 'weekly' && !this.atLeastOneDaySelected()) {
+          this.errorMessage = 'Please select at least one day of the week.';
+          return;
+        }
+      }
+      // Build a strongly-typed daysOfWeek array to satisfy HabitDetail type
+      const selectedDays = Object.entries(this.form.get('daysOfWeek')?.value || {})
+        .filter(([k, v]) => !!v && (['mon','tue','wed','thu','fri','sat','sun'] as const).includes(k as any))
+        .map(([k]) => k as 'mon'|'tue'|'wed'|'thu'|'fri'|'sat'|'sun');
+
+      const payload: Partial<HabitDetail> = {
+        name: name?.trim() ?? '',
+        description: description?.trim() || undefined,
+        category: category ?? undefined,
+        frequency: frequency ?? undefined,
+        reminderFrequency: reminderFrequency || undefined,
+        // Only include reminder details if cadence chosen
+        ...(reminderFrequency ? { reminderTime: this.form.get('reminderTime')?.value || undefined } : {}),
+          ...(reminderFrequency === 'weekly' ? {
+          daysOfWeek: (selectedDays.length ? selectedDays : undefined) as HabitDetail['daysOfWeek']
+        } : {}),
+        ...(reminderFrequency === 'monthly' ? { dayOfMonth: this.form.get('dayOfMonth')?.value || undefined } : {}),
+        notes: notes?.trim() || undefined
+      };
 
     const request$ = this.habitId
       ? this.habitsService.updateHabit(this.habitId, payload)
@@ -107,8 +158,10 @@ export class HabitFormComponent implements OnInit {
             description: '',
             category: 'health',
             frequency: 'daily',
-            reminder: 'morning',
-            isActive: true,
+            reminderFrequency: '',
+            reminderTime: '08:00',
+            daysOfWeek: {mon: false, tue: false, wed: false, thu: false, fri: false, sat: false, sun: false},
+            dayOfMonth: 1,
             notes: ''
           });
         } else {
@@ -139,8 +192,7 @@ export class HabitFormComponent implements OnInit {
           description: habit.description ?? '',
           category: habit.category ?? 'health',
           frequency: habit.frequency ?? 'daily',
-          reminder: habit.reminder ?? 'morning',
-          isActive: habit.isActive ?? true,
+          reminderFrequency: habit.reminderFrequency ?? 'daily',
           notes: habit.notes ?? ''
         });
         this.isLoadingHabit = false;
@@ -150,5 +202,14 @@ export class HabitFormComponent implements OnInit {
         this.isLoadingHabit = false;
       }
     });
+  }
+
+
+  // Helper to check at least one weekday selected (for weekly reminders)
+  atLeastOneDaySelected(): boolean {
+    const days = this.form.get('daysOfWeek');
+    if (!days) return false;
+    const value = (days.value as Record<string, boolean>) || {};
+    return Object.values(value).some(Boolean);
   }
 }

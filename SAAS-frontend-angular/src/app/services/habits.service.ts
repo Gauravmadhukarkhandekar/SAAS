@@ -10,8 +10,10 @@ export interface HabitSummary {
   description?: string;
   category?: string;
   frequency?: string;
-  reminder?: string;
+  reminderFrequency?: string;
   reminderTime?: string;
+  daysOfWeek?: Array<'mon' | 'tue' | 'wed' | 'thu' | 'fri' | 'sat' | 'sun'>;
+  dayOfMonth?: number; // 1..31
   isActive?: boolean;
   currentStreak?: number;
   bestStreak?: number;
@@ -89,7 +91,10 @@ export class HabitsService {
       description: payload.description,
       category: payload.category,
       frequency: payload.frequency,
-      reminder: payload.reminder,
+      reminderFrequency: payload.reminderFrequency,
+      reminderTime: payload.reminderTime, 
+      daysOfWeek: payload.daysOfWeek,
+      dayOfMonth: payload.dayOfMonth,
       isActive: payload.isActive ?? true
     });
 
