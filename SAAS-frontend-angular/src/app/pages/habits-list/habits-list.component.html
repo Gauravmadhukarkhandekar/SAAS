@@ -11,7 +11,12 @@
     <article class="habit-card" *ngFor="let habit of habits; trackBy: trackByHabitId">
       <div class="habit-headline">
         <div class="habit-badge">{{ habit.category || 'General' }}</div>
-        <span class="habit-streak">🔥 {{ habit.currentStreak || 0 }} day streak</span>
+        <label class="complete-toggle">
+          <input
+            type="checkbox"
+            (change)="onToggleComplete(habit, $any($event.target).checked)"          />
+          <span>Mark as complete</span>
+        </label>
       </div>
       <h2>{{ habit.name }}</h2>
       <p class="habit-description">{{ habit.description || 'Keep up the momentum.' }}</p>
@@ -39,24 +44,28 @@
           </span>
         </div>
       </div>
-
-      <div class="habit-actions">
-        <a class="btn btn-outline" [routerLink]="['/habits', habit._id]">View Details</a>
-        <a
-          class="btn btn-ghost icon-button"
-          [routerLink]="['/habits', habit._id, 'edit']"
-          aria-label="Edit habit"
-        >
-          ✏️
-        </a>
-        <button
-          type="button"
-          class="btn btn-ghost icon-button"
-          aria-label="Delete habit"
-          (click)="openDeleteModal(habit)"
-        >
-          🗑️
-        </button>
+      <div class="habit-footer"> 
+        <div class="habit-actions">
+          <a class="btn btn-outline" [routerLink]="['/habits', habit._id]">View Details</a>
+          <a
+            class="btn btn-ghost icon-button"
+            [routerLink]="['/habits', habit._id, 'edit']"
+            aria-label="Edit habit"
+          >
+            ✏️
+          </a>
+          <button
+            type="button"
+            class="btn btn-ghost icon-button"
+            aria-label="Delete habit"
+            (click)="openDeleteModal(habit)"
+          >
+            🗑️
+          </button>
+        </div>
+        <span class="habit-streak">
+          🔥 {{ habit.currentStreak || 0 }} day streak
+        </span>
       </div>
     </article>
   </div>

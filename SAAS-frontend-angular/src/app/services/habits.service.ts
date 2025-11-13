@@ -22,6 +22,7 @@ export interface HabitSummary {
   lastCompletedDate?: string;
   createdAt?: string;
   updatedAt?: string;
+  isCompleted?: boolean;
 }
 
 export interface HabitDetail extends HabitSummary {

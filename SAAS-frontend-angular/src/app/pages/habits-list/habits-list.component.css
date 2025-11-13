@@ -271,3 +271,38 @@
 .btn.btn-danger:hover {
   background: #991b1b;
 }
+
+
+.habit-footer {
+  margin-top: 1.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.complete-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.35rem 0.9rem;
+  border-radius: 999px;
+  background: rgba(34, 197, 94, 0.08);
+  box-shadow: inset 0 0 0 1px rgba(34, 197, 94, 0.4);
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #15803d;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.complete-toggle input[type='checkbox'] {
+  width: 1rem;
+  height: 1rem;
+  accent-color: #22c55e;
+}
+
+.complete-toggle:hover {
+  background: rgba(34, 197, 94, 0.15);
+  box-shadow: inset 0 0 0 1px rgba(22, 163, 74, 0.6);
+}
