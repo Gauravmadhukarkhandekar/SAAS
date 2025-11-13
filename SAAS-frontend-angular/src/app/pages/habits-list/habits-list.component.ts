@@ -111,4 +111,15 @@ export class HabitsListComponent implements OnInit {
       }
     });
   }
+
+  onToggleComplete(habit: HabitSummary, completed: boolean): void {
+       if (!completed) {
+        return;
+      }
+    
+      const current = habit.currentStreak || 0;
+      habit.currentStreak = current + 1;
+    
+      console.log('Habit marked complete (UI only). New streak:', habit._id, habit.currentStreak);
+  }
 }
