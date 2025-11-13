@@ -21,6 +21,10 @@ router.post('/', habitController.createHabit);
 // URL: PUT /api/habits/:id
 router.put('/:id', habitController.updateHabit);
 
+// PUT update habit reminder time
+// URL: PUT /api/habits/:id/reminder-time
+router.put('/:id/reminder-time', habitController.updateHabitReminderTime);
+
 // DELETE a habit
 // URL: DELETE /api/habits/:id
 router.delete('/:id', habitController.deleteHabit);
