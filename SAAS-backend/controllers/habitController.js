@@ -143,3 +143,45 @@ exports.deleteHabit = async (req, res) => {
     });
   }
 };
+
+exports.updateHabitReminderTime = async (req, res) => {
+  try {
+    const habitId = req.params.id;
+    const { date, time } = req.body;
+    
+    if (!date || !time) {
+      return res.status(400).json({
+        success: false,
+        message: 'Date and time are required'
+      });
+    }
+
+    const updatedHabit = await Habit.findByIdAndUpdate(
+      habitId,
+      { 
+        reminderDate: date,
+        reminderTime: time
+      },
+      { new: true, runValidators: true }
+    );
+
+    if (!updatedHabit) {
+      return res.status(404).json({
+        success: false,
+        message: 'Habit not found'
+      });
+    }
+
+    res.status(200).json({
+      success: true,
+      message: 'Reminder time updated successfully',
+      data: updatedHabit
+    });
+  } catch (error) {
+    res.status(400).json({
+      success: false,
+      message: 'Error updating reminder time',
+      error: error.message
+    });
+  }
+};
