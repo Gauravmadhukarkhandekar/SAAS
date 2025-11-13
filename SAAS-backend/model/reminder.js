@@ -11,9 +11,29 @@ const reminderSchema = new mongoose.Schema({
     required: true,
     ref: 'Habit'
   },
+  habit: {
+    type: String,
+    required: false
+  },
+  date: {
+    type: String,
+    required: false
+  },
+  time: {
+    type: String,
+    required: false
+  },
+  channel: {
+    type: String,
+    required: false
+  },
+  tone: {
+    type: String,
+    required: false
+  },
   timeOfDay: {
     type: String,
-    required: true
+    required: false
   },
   isEnabled: {
     type: Boolean,
