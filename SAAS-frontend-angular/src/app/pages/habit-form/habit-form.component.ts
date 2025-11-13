@@ -49,6 +49,7 @@ export class HabitFormComponent implements OnInit {
       sun: [false]
     }),
     dayOfMonth: [1],
+    monthlyDate: [''],
     notes: ['']
   });
 
@@ -82,10 +83,12 @@ export class HabitFormComponent implements OnInit {
     this.form.get('reminderFrequency')?.valueChanges.subscribe((rf) => {
       const timeCtrl = this.form.get('reminderTime');
       const domCtrl = this.form.get('dayOfMonth');
+      const dateCtrl = this.form.get('monthlyDate');
 
       // Clear validators first
       timeCtrl?.clearValidators();
       domCtrl?.clearValidators();
+      dateCtrl?.clearValidators();
 
       if (rf === 'daily') {
         timeCtrl?.setValidators([Validators.required]);
@@ -94,11 +97,21 @@ export class HabitFormComponent implements OnInit {
         // daysOfWeek selection will be checked in onSubmit()
       } else if (rf === 'monthly') {
         timeCtrl?.setValidators([Validators.required]);
-        domCtrl?.setValidators([Validators.required, Validators.min(1), Validators.max(31)]);
+        dateCtrl?.setValidators([Validators.required]);
       }
 
       timeCtrl?.updateValueAndValidity({ emitEvent: false });
       domCtrl?.updateValueAndValidity({ emitEvent: false });
+      dateCtrl?.updateValueAndValidity({ emitEvent: false });
+    });
+
+    this.form.get('monthlyDate')?.valueChanges.subscribe((value) => {
+      if (value) {
+        const date = new Date(value);
+        if (!isNaN(date.getTime())) {
+          this.form.get('dayOfMonth')?.setValue(date.getDate(), { emitEvent: false });
+        }
+      }
     });
   }
 
@@ -162,6 +175,7 @@ export class HabitFormComponent implements OnInit {
             reminderTime: '08:00',
             daysOfWeek: {mon: false, tue: false, wed: false, thu: false, fri: false, sat: false, sun: false},
             dayOfMonth: 1,
+            monthlyDate: '',
             notes: ''
           });
         } else {
@@ -211,5 +225,78 @@ export class HabitFormComponent implements OnInit {
     if (!days) return false;
     const value = (days.value as Record<string, boolean>) || {};
     return Object.values(value).some(Boolean);
+  }
+
+  get reminderSummary(): string | null {
+    const rf = this.form.get('reminderFrequency')?.value as string | null | undefined;
+    if (!rf) {
+      return null;
+    }
+  
+    const time = this.form.get('reminderTime')?.value as string | null | undefined;
+  
+    if (rf === 'daily') {
+      if (!time) return null;
+      return `You will get a daily reminder at ${time}.`;
+    }
+  
+    if (rf === 'weekly') {
+      const daysLabel = this.getSelectedDaysLabel();
+      if (!time || !daysLabel) return null;
+      return `You will get a reminder on ${daysLabel} at ${time} every week.`;
+    }
+  
+    if (rf === 'monthly') {
+      const dateStr = this.form.get('monthlyDate')?.value as string | null | undefined;
+      if (!time || !dateStr) return null;
+      const date = new Date(dateStr);
+      if (isNaN(date.getTime())) return null;
+  
+      const day = date.getDate();
+      const dayWithSuffix = this.getOrdinalSuffix(day);
+  
+      return `You will get a reminder on the ${dayWithSuffix} at ${time} every month.`;
+    }
+  
+    return null;
+  }
+  
+  private getSelectedDaysLabel(): string | null {
+    const daysGroup = this.form.get('daysOfWeek');
+    if (!daysGroup) return null;
+    const value = (daysGroup.value || {}) as Record<string, boolean>;
+  
+    const labels: Record<string, string> = {
+      mon: 'Mon',
+      tue: 'Tue',
+      wed: 'Wed',
+      thu: 'Thu',
+      fri: 'Fri',
+      sat: 'Sat',
+      sun: 'Sun'
+    };
+  
+    const selected = Object.entries(value)
+      .filter(([key, isSelected]) => !!isSelected && labels[key])
+      .map(([key]) => labels[key]);
+  
+    if (!selected.length) return null;
+    return selected.join(', ');
+  }
+
+  private getOrdinalSuffix(day: number): string {
+    const j = day % 10,
+      k = day % 100;
+  
+    if (j === 1 && k !== 11) {
+      return `${day}st`;
+    }
+    if (j === 2 && k !== 12) {
+      return `${day}nd`;
+    }
+    if (j === 3 && k !== 13) {
+      return `${day}rd`;
+    }
+    return `${day}th`;
   }
 }

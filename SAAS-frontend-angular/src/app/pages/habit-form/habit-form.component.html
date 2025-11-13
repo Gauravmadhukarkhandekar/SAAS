@@ -88,21 +88,24 @@
                 </div>
               </div>
       
-              <!-- Monthly: time + day of month -->
+              <!-- Monthly: time + calendar date (UI only) -->
               <div *ngIf="rf === 'monthly'" class="form-grid">
                 <label class="form-field">
                   <span>Time</span>
                   <input type="time" formControlName="reminderTime" />
                 </label>
                 <label class="form-field">
-                  <span>Day of month</span>
-                  <input type="number" min="1" max="31" formControlName="dayOfMonth" />
-                  <small class="error" *ngIf="form.get('dayOfMonth')?.invalid && form.get('dayOfMonth')?.touched">
-                    Please choose a date between 1 and 31.
+                  <span>Date</span>
+                  <input type="date" formControlName="monthlyDate" />
+                  <small class="error" *ngIf="form.get('monthlyDate')?.invalid && form.get('monthlyDate')?.touched">
+                    Please choose a valid date.
                   </small>
                 </label>
               </div>
             </div>
+      <div *ngIf="reminderSummary" class="reminder-summary">
+        {{ reminderSummary }}
+      </div>
     </div>
 
     <label class="form-field">
