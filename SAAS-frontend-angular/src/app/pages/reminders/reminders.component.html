@@ -9,15 +9,14 @@
 
   <section class="upcoming">
     <h2>Upcoming nudges</h2>
-    <div class="reminder-grid">
-      <article class="reminder-card" *ngFor="let reminder of upcomingReminders">
+    <div class="reminder-grid">      <article class="reminder-card" *ngFor="let reminder of upcomingReminders; let i = index">
         <span class="habit-name">{{ reminder.habit }}</span>
-        <p class="reminder-time">{{ reminder.time }}</p>
+        <p class="reminder-time">{{ getDisplayTime(reminder) }}</p>
         <div class="reminder-meta">
           <span>{{ reminder.channel }}</span>
           <span>{{ reminder.tone }}</span>
         </div>
-        <button type="button">Adjust cadence</button>
+        <button type="button" (click)="openCadenceModal(i)">Adjust cadence</button>
       </article>
     </div>
   </section>
@@ -35,4 +34,19 @@
       </li>
     </ul>
   </section>
+
+  <!-- Modal for calendar and time selection -->
+  <div class="modal" *ngIf="cadenceModalOpen">
+    <div class="modal-content">
+      <h3>Adjust Reminder Time</h3>
+      <label>Date:
+        <input type="date" [(ngModel)]="selectedDate" />
+      </label>
+      <label>Time:
+        <input type="time" [(ngModel)]="selectedTime" />
+      </label>
+      <button type="button" (click)="saveCadence()">Save</button>
+      <button type="button" (click)="closeCadenceModal()">Cancel</button>
+    </div>
+  </div>
 </section>

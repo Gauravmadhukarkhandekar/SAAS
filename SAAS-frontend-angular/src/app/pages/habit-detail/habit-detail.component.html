@@ -22,19 +22,9 @@
       <div class="meta-pair">
         <span>Frequency</span>
         <strong>{{ habit.frequency || 'Custom cadence' }}</strong>
-      </div>
-      <div class="meta-pair">
+      </div>      <div class="meta-pair">
         <span>Reminder</span>
-        <strong>
-          <ng-container *ngIf="habit.isActive !== false; else reminderPaused">
-            <ng-container [ngSwitch]="habit.reminderFrequency">
-              <span *ngSwitchCase="'daily'">Daily</span>
-              <span *ngSwitchCase="'weekly'">Weekly</span>
-              <span *ngSwitchCase="'monthly'">Monthly</span>
-              <span *ngSwitchDefault>Not set</span>
-            </ng-container>
-          </ng-container>
-        </strong>
+        <strong>{{ getReminderDisplay() }}</strong>
       </div>
       <div class="meta-pair">
         <span>Status</span>

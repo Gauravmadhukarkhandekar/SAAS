@@ -20,10 +20,9 @@
         <div>
           <span class="meta-label">Frequency</span>
           <span class="meta-value">{{ habit.frequency || 'Custom' }}</span>
-        </div>
-        <div>
+        </div>        <div>
           <span class="meta-label">Reminder</span>
-          <span class="meta-value">{{ habit.reminderFrequency ? (habit.reminderFrequency | titlecase) : '—' }}</span>
+          <span class="meta-value">{{ getReminderDisplay(habit) }}</span>
         </div>
         <div>
           <span class="meta-label">Best Streak</span>

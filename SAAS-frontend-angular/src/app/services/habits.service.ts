@@ -10,8 +10,10 @@ export interface HabitSummary {
   description?: string;
   category?: string;
   frequency?: string;
+  reminder?: string;
   reminderFrequency?: string;
   reminderTime?: string;
+  reminderDate?: string;
   daysOfWeek?: Array<'mon' | 'tue' | 'wed' | 'thu' | 'fri' | 'sat' | 'sun'>;
   dayOfMonth?: number; // 1..31
   isActive?: boolean;

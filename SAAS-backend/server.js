@@ -1,11 +1,10 @@
-
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
 const authRoutes = require('./routes/auth');
 const habitRoutes = require('./routes/habit');
 const habitLogRoutes = require('./routes/habitLog');
-
+const reminderRoutes = require('./routes/reminder');
 
 require('dotenv').config();
 
@@ -26,6 +25,7 @@ app.get('/health', (_req, res) => res.json({ ok: true }));
 app.use('/api/auth', authRoutes);
 app.use('/api/habits', habitRoutes);
 app.use('/api/habitLogs', habitLogRoutes);
+app.use('/api/reminders', reminderRoutes);
 
 app.get('/api', (req, res) => {
   res.json({ message: 'API root', endpoints: ['/api/health', '/api/habits', '/api/habitLogs'] });
@@ -45,6 +45,7 @@ mongoose.connect(MONGODB_URI)
 app.use('/api/auth', require('./routes/auth.js'));
 app.use('/api/habits', require('./routes/habit.js'));
 app.use('/api/habitLogs', require('./routes/habitLog.js'));
+app.use('/api/reminders', require('./routes/reminder.js'));
 
 // Health check endpoint
 app.get('/api/health', (req, res) => {

@@ -47,4 +47,37 @@ export class HabitDetailComponent implements OnInit {
       }
     });
   }
+
+  getReminderDisplay(): string {
+    if (!this.habit) return '—';
+    
+    // If reminderTime is None or not set, return Not set
+    if (!this.habit.reminderTime || this.habit.reminderTime === 'None') {
+      return 'Not set';
+    }
+
+    // If we have both date and time, format it nicely
+    if (this.habit.reminderDate && this.habit.reminderTime !== 'None') {
+      const today = new Date().toISOString().split('T')[0];
+      const tomorrow = new Date(Date.now() + 86400000).toISOString().split('T')[0];
+      const yesterday = new Date(Date.now() - 86400000).toISOString().split('T')[0];
+
+      let dateLabel = '';
+      if (this.habit.reminderDate === today) {
+        dateLabel = 'Today';
+      } else if (this.habit.reminderDate === tomorrow) {
+        dateLabel = 'Tomorrow';
+      } else if (this.habit.reminderDate === yesterday) {
+        dateLabel = 'Yesterday';
+      } else {
+        const date = new Date(this.habit.reminderDate + 'T00:00:00');
+        dateLabel = date.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' });
+      }
+
+      return `${dateLabel} at ${this.habit.reminderTime}`;
+    }
+
+    // If we only have time, just show the time
+    return this.habit.reminderTime;
+  }
 }
