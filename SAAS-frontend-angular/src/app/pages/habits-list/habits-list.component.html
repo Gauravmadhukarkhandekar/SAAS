@@ -42,7 +42,21 @@
 
       <div class="habit-actions">
         <a class="btn btn-outline" [routerLink]="['/habits', habit._id]">View Details</a>
-        <a class="btn btn-ghost" [routerLink]="['/habits', habit._id, 'edit']">Edit</a>
+        <a
+          class="btn btn-ghost icon-button"
+          [routerLink]="['/habits', habit._id, 'edit']"
+          aria-label="Edit habit"
+        >
+          ✏️
+        </a>
+        <button
+          type="button"
+          class="btn btn-ghost icon-button"
+          aria-label="Delete habit"
+          (click)="openDeleteModal(habit)"
+        >
+          🗑️
+        </button>
       </div>
     </article>
   </div>
@@ -65,5 +79,29 @@
   <div class="loading" *ngIf="isLoading">
     <div class="spinner"></div>
     <p>Loading your habits...</p>
+  </div>
+
+
+  <div class="modal-backdrop" *ngIf="showDeleteModal">
+    <div class="modal">
+      <h2>Delete habit?</h2>
+      <p>Are you sure you want to delete the habit? All your progress will be lost.</p>
+      <div class="modal-actions">
+        <button
+          type="button"
+          class="btn btn-outline"
+          (click)="onCancelDelete()"
+        >
+          Cancel
+        </button>
+        <button
+          type="button"
+          class="btn btn-danger"
+          (click)="onConfirmDelete()"
+        >
+          Yes, I'm sure
+        </button>
+      </div>
+    </div>
   </div>
 </section>

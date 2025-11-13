@@ -14,6 +14,9 @@ export class HabitsListComponent implements OnInit {
   isLoading = true;
   errorMessage = '';
   habits: HabitSummary[] = [];
+  isDeleting = false;
+  habitToDelete: any = null;
+  showDeleteModal = false;
 
   constructor(private readonly habitsService: HabitsService) {}
 
@@ -70,5 +73,42 @@ export class HabitsListComponent implements OnInit {
 
     // If we only have time, just show the time
     return habit.reminderTime;
+  }
+
+  openDeleteModal(habit: any): void {
+    this.habitToDelete = habit
+    this.showDeleteModal = true;
+  }
+
+  onCancelDelete(): void {
+    this.showDeleteModal = false;
+    this.habitToDelete = null;
+  }
+
+  onConfirmDelete(): void {
+    if (!this.habitToDelete || !this.habitToDelete._id) {
+      this.showDeleteModal = false;
+      this.habitToDelete = null;
+      return;
+    }
+
+    const habitId = this.habitToDelete._id;
+    this.isDeleting = true;
+
+    this.habitsService.deleteHabit(habitId).subscribe({
+      next: () => {
+        // Optimistically update the list in the UI
+        this.habits = this.habits.filter(h => h._id !== habitId);
+        this.isDeleting = false;
+        this.showDeleteModal = false;
+        this.habitToDelete = null;
+      },
+      error: (error) => {
+        this.errorMessage = error.message || 'Unable to delete habit.';
+        this.isDeleting = false;
+        this.showDeleteModal = false;
+        this.habitToDelete = null;
+      }
+    });
   }
 }
