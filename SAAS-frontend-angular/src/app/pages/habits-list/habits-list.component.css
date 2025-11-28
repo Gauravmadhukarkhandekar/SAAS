@@ -39,7 +39,7 @@
   padding: 2rem;
   border: 1px solid rgba(148, 163, 184, 0.15);
   box-shadow: 
-    0 20px 60px rgba(99, 102, 241, 0.15),
+    0 20px 60px rgba(239, 68, 68, 0.15),
     0 0 0 1px rgba(255, 255, 255, 0.5) inset;
   display: flex;
   flex-direction: column;
@@ -56,7 +56,7 @@
   left: 0;
   right: 0;
   height: 4px;
-  background: linear-gradient(90deg, #6366f1, #8b5cf6, #ec4899);
+  background: linear-gradient(90deg, #ef4444, #f97316, #ec4899);
   opacity: 0;
   transition: opacity 0.3s ease;
 }
@@ -64,9 +64,9 @@
 .habit-card:hover {
   transform: translateY(-8px) scale(1.02);
   box-shadow: 
-    0 32px 80px rgba(79, 70, 229, 0.25),
+    0 32px 80px rgba(220, 38, 38, 0.25),
     0 0 0 1px rgba(255, 255, 255, 0.8) inset;
-  border-color: rgba(99, 102, 241, 0.3);
+  border-color: rgba(239, 68, 68, 0.3);
 }
 
 .habit-card:hover::before {
@@ -83,7 +83,7 @@
 .habit-badge {
   padding: 0.4rem 1rem;
   border-radius: 999px;
-  background: linear-gradient(135deg, rgba(14, 165, 233, 0.2), rgba(99, 102, 241, 0.15));
+  background: linear-gradient(135deg, rgba(14, 165, 233, 0.2), rgba(239, 68, 68, 0.15));
   color: #0ea5e9;
   font-weight: 600;
   white-space: nowrap;
@@ -177,10 +177,10 @@
 }
 
 .btn-primary {
-  background: linear-gradient(135deg, #6366f1, #8b5cf6, #ec4899);
+  background: linear-gradient(135deg, #ef4444, #f97316, #ec4899);
   background-size: 200% 200%;
   color: #fff;
-  box-shadow: 0 15px 35px rgba(99, 102, 241, 0.35);
+  box-shadow: 0 15px 35px rgba(239, 68, 68, 0.35);
   position: relative;
   overflow: hidden;
 }
@@ -202,14 +202,14 @@
 
 .btn-primary:hover {
   background-position: right center;
-  box-shadow: 0 20px 45px rgba(99, 102, 241, 0.45);
+  box-shadow: 0 20px 45px rgba(239, 68, 68, 0.45);
   transform: translateY(-2px);
 }
 
 .btn-outline {
-  background: rgba(79, 70, 229, 0.08);
-  color: #4f46e5;
-  box-shadow: inset 0 0 0 1px rgba(79, 70, 229, 0.3);
+  background: rgba(220, 38, 38, 0.08);
+  color: #dc2626;
+  box-shadow: inset 0 0 0 1px rgba(220, 38, 38, 0.3);
 }
 
 .btn-ghost {
@@ -256,12 +256,12 @@
   width: 48px;
   height: 48px;
   border-radius: 50%;
-  border: 4px solid rgba(99, 102, 241, 0.2);
-  border-top-color: #6366f1;
-  border-right-color: #8b5cf6;
+  border: 4px solid rgba(239, 68, 68, 0.2);
+  border-top-color: #ef4444;
+  border-right-color: #f97316;
   margin: 0 auto 1.5rem;
   animation: spin 0.9s linear infinite;
-  box-shadow: 0 0 20px rgba(99, 102, 241, 0.3);
+  box-shadow: 0 0 20px rgba(239, 68, 68, 0.3);
 }
 
 @keyframes spin {

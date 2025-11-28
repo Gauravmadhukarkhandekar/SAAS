@@ -1,5 +1,5 @@
 .footer {
-  background: linear-gradient(135deg, rgba(79, 70, 229, 0.08), rgba(236, 72, 153, 0.08));
+  background: linear-gradient(135deg, rgba(239, 68, 68, 0.08), rgba(249, 115, 22, 0.08));
   padding: 3rem 1.5rem 2rem;
   color: #1f2937;
 }
@@ -24,7 +24,7 @@
   width: 54px;
   height: 54px;
   border-radius: 16px;
-  background: linear-gradient(135deg, #6366f1, #8b5cf6, #ec4899);
+  background: linear-gradient(135deg, #ef4444, #f97316, #f59e0b);
   display: grid;
   place-items: center;
   color: #fff;

@@ -37,7 +37,7 @@
   -webkit-backdrop-filter: blur(20px) saturate(180%);
   border: 1px solid rgba(148, 163, 184, 0.15);
   box-shadow: 
-    0 20px 60px rgba(99, 102, 241, 0.15),
+    0 20px 60px rgba(239, 68, 68, 0.15),
     0 0 0 1px rgba(255, 255, 255, 0.5) inset;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   position: relative;
@@ -51,7 +51,7 @@
   left: 0;
   right: 0;
   height: 3px;
-  background: linear-gradient(90deg, #6366f1, #8b5cf6, #ec4899);
+  background: linear-gradient(90deg, #ef4444, #f97316, #f59e0b);
   transform: scaleX(0);
   transform-origin: left;
   transition: transform 0.3s ease;
@@ -60,9 +60,9 @@
 .summary-tile:hover {
   transform: translateY(-4px);
   box-shadow: 
-    0 28px 70px rgba(79, 70, 229, 0.22),
+    0 28px 70px rgba(220, 38, 38, 0.22),
     0 0 0 1px rgba(255, 255, 255, 0.8) inset;
-  border-color: rgba(99, 102, 241, 0.25);
+  border-color: rgba(239, 68, 68, 0.25);
 }
 
 .summary-tile:hover::before {
@@ -104,7 +104,7 @@
   -webkit-backdrop-filter: blur(20px) saturate(180%);
   border: 1px solid rgba(148, 163, 184, 0.15);
   box-shadow: 
-    0 25px 65px rgba(79, 70, 229, 0.18),
+    0 25px 65px rgba(220, 38, 38, 0.18),
     0 0 0 1px rgba(255, 255, 255, 0.5) inset;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
@@ -112,7 +112,7 @@
 .visual-card:hover {
   transform: translateY(-4px);
   box-shadow: 
-    0 32px 80px rgba(79, 70, 229, 0.25),
+    0 32px 80px rgba(220, 38, 38, 0.25),
     0 0 0 1px rgba(255, 255, 255, 0.8) inset;
 }
 
@@ -142,11 +142,11 @@
 .chart-bar {
   width: 100%;
   border-radius: 16px 16px 6px 6px;
-  background: linear-gradient(180deg, rgba(99, 102, 241, 0.95), rgba(129, 140, 248, 0.5), rgba(139, 92, 246, 0.4));
+  background: linear-gradient(180deg, rgba(239, 68, 68, 0.95), rgba(129, 140, 248, 0.5), rgba(139, 92, 246, 0.4));
   min-height: 60px;
   transition: all 0.3s ease;
   box-shadow: 
-    0 4px 12px rgba(99, 102, 241, 0.3),
+    0 4px 12px rgba(239, 68, 68, 0.3),
     inset 0 1px 0 rgba(255, 255, 255, 0.3);
   position: relative;
   overflow: hidden;
@@ -166,7 +166,7 @@
 .chart-column:hover .chart-bar {
   transform: scaleY(1.05);
   box-shadow: 
-    0 6px 16px rgba(99, 102, 241, 0.4),
+    0 6px 16px rgba(239, 68, 68, 0.4),
     inset 0 1px 0 rgba(255, 255, 255, 0.4);
 }
 
@@ -208,11 +208,11 @@
 .bar-fill {
   height: 100%;
   border-radius: inherit;
-  background: linear-gradient(90deg, #6366f1, #8b5cf6, #ec4899);
+  background: linear-gradient(90deg, #ef4444, #f97316, #f59e0b);
   background-size: 200% 100%;
   transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
   box-shadow: 
-    0 2px 8px rgba(99, 102, 241, 0.4),
+    0 2px 8px rgba(239, 68, 68, 0.4),
     inset 0 1px 0 rgba(255, 255, 255, 0.3);
   position: relative;
   overflow: hidden;
@@ -264,7 +264,7 @@
   padding: 0.75rem 1.5rem;
   border: none;
   border-radius: 999px;
-  background: linear-gradient(135deg, #6366f1, #8b5cf6);
+  background: linear-gradient(135deg, #ef4444, #f97316);
   color: #fff;
   font-weight: 600;
   cursor: pointer;
@@ -273,7 +273,7 @@
 
 .retry-btn:hover {
   transform: translateY(-1px);
-  box-shadow: 0 10px 25px rgba(99, 102, 241, 0.3);
+  box-shadow: 0 10px 25px rgba(239, 68, 68, 0.3);
 }
 
 .empty-state {
