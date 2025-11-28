@@ -150,6 +150,41 @@
   color: #0f172a;
 }
 
+.loading-state,
+.error-state {
+  text-align: center;
+  padding: 3rem 1.5rem;
+  color: #475569;
+}
+
+.error-state {
+  color: #dc2626;
+}
+
+.retry-btn {
+  margin-top: 1rem;
+  padding: 0.75rem 1.5rem;
+  border: none;
+  border-radius: 999px;
+  background: linear-gradient(135deg, #6366f1, #8b5cf6);
+  color: #fff;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.retry-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 10px 25px rgba(99, 102, 241, 0.3);
+}
+
+.empty-state {
+  color: #94a3b8;
+  text-align: center;
+  padding: 2rem;
+  font-style: italic;
+}
+
 @media (max-width: 768px) {
   .reports-page {
     padding: 3rem 1.25rem 4rem;

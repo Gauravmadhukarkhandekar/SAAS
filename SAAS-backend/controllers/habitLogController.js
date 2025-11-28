@@ -1,8 +1,23 @@
 const HabitLog = require('../models/HabitLog');
+const mongoose = require('mongoose');
 
 exports.getAll = async (req, res) => {
   try {
-    const logs = await HabitLog.find({}).sort({ completedDate: -1 });
+    const { userId } = req.query;
+    let query = {};
+    
+    // If userId is provided, filter by userId
+    // Handle both string and ObjectId formats
+    if (userId) {
+      // Try to convert to ObjectId if it's a valid ObjectId string
+      if (mongoose.Types.ObjectId.isValid(userId)) {
+        query.userId = new mongoose.Types.ObjectId(userId);
+      } else {
+        query.userId = userId;
+      }
+    }
+    
+    const logs = await HabitLog.find(query).sort({ completedDate: -1 });
     res.status(200).json({
       success: true,
       count: logs.length,
