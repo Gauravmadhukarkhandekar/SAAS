@@ -1,6 +1,9 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
+import { AuthService } from '../../services/auth.service';
+import { HabitsService, HabitSummary } from '../../services/habits.service';
+import { ReportsService } from '../../services/reports.service';
 
 @Component({
   selector: 'app-welcome',
@@ -9,7 +12,14 @@ import { RouterLink } from '@angular/router';
   templateUrl: './welcome.component.html',
   styleUrl: './welcome.component.css'
 })
-export class WelcomeComponent {
+export class WelcomeComponent implements OnInit {
+  isLoggedIn = false;
+  loading = true;
+  userStats: any = null;
+  recentHabits: HabitSummary[] = [];
+  todayCompletions = 0;
+
+  // Static stats for non-logged-in users
   heroStats = [
     { label: 'Habits Tracked', value: '50K+' },
     { label: 'Avg. Success Rate', value: '85%' },
@@ -71,4 +81,93 @@ export class WelcomeComponent {
       role: 'Product Designer'
     }
   ];
+
+  constructor(
+    private readonly authService: AuthService,
+    private readonly habitsService: HabitsService,
+    private readonly reportsService: ReportsService
+  ) {}
+
+  ngOnInit(): void {
+    // Check if user is logged in
+    this.authService.currentUser$.subscribe(user => {
+      this.isLoggedIn = !!user;
+      this.loading = false;
+      
+      if (this.isLoggedIn) {
+        this.loadUserData();
+      }
+    });
+  }
+
+  loadUserData(): void {
+    // Load user's habits
+    this.habitsService.getHabits().subscribe({
+      next: (habits) => {
+        this.recentHabits = habits.slice(0, 3); // Get first 3 habits
+        this.updateHeroStats(habits);
+      },
+      error: (error) => {
+        console.error('Error loading habits:', error);
+      }
+    });
+
+    // Load user's stats
+    this.reportsService.getReports().subscribe({
+      next: (stats) => {
+        this.userStats = stats;
+        this.updateHeroStatsWithStats(stats);
+      },
+      error: (error) => {
+        console.error('Error loading stats:', error);
+      }
+    });
+  }
+
+  private updateHeroStats(habits: HabitSummary[]): void {
+    const activeHabits = habits.filter(h => h.isActive !== false);
+    const totalStreak = habits.reduce((sum, h) => sum + (h.currentStreak || 0), 0);
+    const avgStreak = activeHabits.length > 0 ? Math.round(totalStreak / activeHabits.length) : 0;
+
+    this.heroStats = [
+      { label: 'Your Habits', value: `${activeHabits.length}` },
+      { label: 'Avg. Streak', value: `${avgStreak} days` },
+      { label: 'Total Completions', value: `${habits.reduce((sum, h) => sum + (h.bestStreak || 0), 0)}` }
+    ];
+  }
+
+  private updateHeroStatsWithStats(stats: any): void {
+    if (stats) {
+      this.heroStats = [
+        { label: 'Active Habits', value: `${stats.totalHabits}` },
+        { label: 'Completion Rate', value: `${stats.completionRate}%` },
+        { label: 'Total Completed', value: `${stats.totalCompleted}` }
+      ];
+    }
+  }
+
+  get greeting(): string {
+    if (!this.isLoggedIn) return '';
+    const hour = new Date().getHours();
+    if (hour < 12) return 'Good morning';
+    if (hour < 18) return 'Good afternoon';
+    return 'Good evening';
+  }
+
+  get userName(): string {
+    return this.authService.currentUser?.user?.name || '';
+  }
+
+  getProgressPercentage(habit: HabitSummary): number {
+    if (!habit.bestStreak || habit.bestStreak === 0) return 20;
+    const current = habit.currentStreak || 0;
+    const best = habit.bestStreak || 1;
+    return Math.min(100, Math.round((current / best) * 100));
+  }
+
+  getAverageProgress(): number {
+    if (this.recentHabits.length === 0) return 0;
+    const total = this.recentHabits.reduce((sum, h) => sum + this.getProgressPercentage(h), 0);
+    return Math.round(total / this.recentHabits.length);
+  }
 }

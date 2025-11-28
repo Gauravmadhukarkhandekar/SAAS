@@ -2,7 +2,8 @@
   min-height: 100vh;
   display: flex;
   flex-direction: column;
-  background: linear-gradient(135deg, #f8fafc 0%, #eef2ff 30%, #e0f2fe 60%, #fdf2f8 100%);
+  position: relative;
+  z-index: 1;
 }
 
 .app-main {
@@ -10,4 +11,16 @@
   position: relative;
   z-index: 1;
   padding-top: 88px;
+  animation: fadeIn 0.5s ease-in;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
