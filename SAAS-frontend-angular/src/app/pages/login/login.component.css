@@ -2,7 +2,7 @@
   min-height: calc(100vh - 200px);
   display: grid;
   place-items: center;
-  padding: 4rem 1.5rem;
+  padding: 1rem 1.5rem;
 }
 
 .auth-card {

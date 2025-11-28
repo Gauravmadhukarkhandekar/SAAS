@@ -1,13 +1,13 @@
 :host {
   display: block;
-  padding: 0.5rem 1.5rem 5rem;
+  padding: 0 1.5rem 5rem;
   background: radial-gradient(circle at top right, rgba(239, 68, 68, 0.15) 0%, transparent 55%),
     radial-gradient(circle at 10% 20%, rgba(236, 72, 153, 0.1) 0%, transparent 45%);
 }
 
 .next-reminder {
   max-width: 1200px;
-  margin: 0.5rem auto 2rem;
+  margin: 0 auto 2rem;
 }
 
 .hero {
