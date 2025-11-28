@@ -70,7 +70,7 @@ export class RemindersComponent implements OnInit {
       error: (error) => {
         console.error('Error loading habits:', error);
         console.error('Error details:', error.message, error.status);
-        alert('Failed to load habits. Please make sure the backend server is running on port 3001.');
+        alert('Failed to load habits. Please make sure the backend server is running and check your API configuration.');
       }
     });
   }

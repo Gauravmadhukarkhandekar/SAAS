@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { BehaviorSubject, Observable, catchError, tap, throwError } from 'rxjs';
+import { environment } from '../../environments/environment';
 
 export interface AuthUser {
   _id: string;
@@ -18,7 +19,7 @@ export interface AuthResponse {
   providedIn: 'root'
 })
 export class AuthService {
-  private readonly baseUrl = 'http://localhost:3001/api/auth';
+  private readonly baseUrl = `${environment.apiUrl}/auth`;
   private readonly storageKey = 'betterme-auth';
   private readonly currentUserSubject = new BehaviorSubject<AuthResponse | null>(
     this.restoreSession()
