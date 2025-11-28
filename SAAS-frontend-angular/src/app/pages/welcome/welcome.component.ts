@@ -18,6 +18,7 @@ export class WelcomeComponent implements OnInit {
   userStats: any = null;
   recentHabits: HabitSummary[] = [];
   todayCompletions = 0;
+  nextReminder: { habit: string; dateLabel: string; time: string } | null = null;
 
   // Static stats for non-logged-in users
   heroStats = [
@@ -134,6 +135,8 @@ export class WelcomeComponent implements OnInit {
       { label: 'Avg. Streak', value: `${avgStreak} days` },
       { label: 'Total Completions', value: `${habits.reduce((sum, h) => sum + (h.bestStreak || 0), 0)}` }
     ];
+
+    this.updateNextReminder(habits);
   }
 
   private updateHeroStatsWithStats(stats: any): void {
@@ -144,6 +147,58 @@ export class WelcomeComponent implements OnInit {
         { label: 'Total Completed', value: `${stats.totalCompleted}` }
       ];
     }
+  }
+
+  private updateNextReminder(habits: HabitSummary[]): void {
+    const upcoming = habits
+      .filter(
+        (habit) =>
+          !!habit.reminderDate &&
+          !!habit.reminderTime &&
+          habit.reminderTime !== 'None'
+      )
+      .map((habit) => {
+        const dateTime = new Date(`${habit.reminderDate}T${habit.reminderTime}`);
+        return {
+          habit: habit.name ?? 'Habit reminder',
+          date: habit.reminderDate as string,
+          time: habit.reminderTime as string,
+          dateTime
+        };
+      })
+      .filter((item) => !isNaN(item.dateTime.getTime()))
+      .sort((a, b) => a.dateTime.getTime() - b.dateTime.getTime());
+
+    if (upcoming.length === 0) {
+      this.nextReminder = null;
+      return;
+    }
+
+    const next = upcoming[0];
+    this.nextReminder = {
+      habit: next.habit,
+      dateLabel: this.getFriendlyDateLabel(next.date),
+      time: next.time
+    };
+  }
+
+  private getFriendlyDateLabel(dateString: string): string {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    const target = new Date(dateString + 'T00:00:00');
+    target.setHours(0, 0, 0, 0);
+
+    const diff = (target.getTime() - today.getTime()) / (1000 * 60 * 60 * 24);
+    if (diff === 0) return 'Today';
+    if (diff === 1) return 'Tomorrow';
+    if (diff === -1) return 'Yesterday';
+
+    return target.toLocaleDateString('en-US', {
+      weekday: 'short',
+      month: 'short',
+      day: 'numeric'
+    });
   }
 
   get greeting(): string {

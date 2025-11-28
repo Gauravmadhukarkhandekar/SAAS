@@ -75,6 +75,10 @@ export class RemindersComponent implements OnInit {
     });
   }
 
+  getHabitInitial(name: string): string {
+    return name ? name.charAt(0).toUpperCase() : 'H';
+  }
+
   getReminderChannel(reminder: string): string {
     const channels: any = {
       'morning': 'Mobile push',

@@ -1,3 +1,16 @@
+<!-- Reminder banner at the very top -->
+<section class="next-reminder" *ngIf="isLoggedIn && nextReminder">
+  <div class="reminder-pill">Next reminder</div>
+  <div class="reminder-info">
+    <h3>{{ nextReminder.habit }}</h3>
+    <p>{{ nextReminder.dateLabel }} · {{ nextReminder.time }}</p>
+  </div>
+  <a routerLink="/reminders" class="reminder-manage">
+    Manage reminders
+    <span>→</span>
+  </a>
+</section>
+
 <section class="hero">
   <div class="hero-content">
     <div class="hero-text">
