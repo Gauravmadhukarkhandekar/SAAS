@@ -326,6 +326,33 @@
   font-weight: 600;
 }
 
+.countdown-text {
+  margin: 0 0 0 0.75rem !important;
+  color: #ef4444 !important;
+  font-weight: 700 !important;
+  font-size: 1rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.35rem 0.8rem;
+  background: rgba(239, 68, 68, 0.1);
+  border-radius: 999px;
+  border: 1px solid rgba(239, 68, 68, 0.2);
+  animation: pulse 2s ease-in-out infinite;
+  vertical-align: middle;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.9;
+    transform: scale(1.02);
+  }
+}
+
 .reminder-manage {
   display: inline-flex;
   align-items: center;

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
@@ -12,13 +12,15 @@ import { ReportsService } from '../../services/reports.service';
   templateUrl: './welcome.component.html',
   styleUrl: './welcome.component.css'
 })
-export class WelcomeComponent implements OnInit {
+export class WelcomeComponent implements OnInit, OnDestroy {
   isLoggedIn = false;
   loading = true;
   userStats: any = null;
   recentHabits: HabitSummary[] = [];
   todayCompletions = 0;
-  nextReminder: { habit: string; dateLabel: string; time: string } | null = null;
+  nextReminder: { habit: string; dateLabel: string; time: string; dateTime: Date } | null = null;
+  countdown: string = '';
+  private countdownInterval: any = null;
 
   // Static stats for non-logged-in users
   heroStats = [
@@ -86,7 +88,8 @@ export class WelcomeComponent implements OnInit {
   constructor(
     private readonly authService: AuthService,
     private readonly habitsService: HabitsService,
-    private readonly reportsService: ReportsService
+    private readonly reportsService: ReportsService,
+    private readonly cdr: ChangeDetectorRef
   ) {}
 
   ngOnInit(): void {
@@ -159,6 +162,13 @@ export class WelcomeComponent implements OnInit {
       )
       .map((habit) => {
         const dateTime = new Date(`${habit.reminderDate}T${habit.reminderTime}`);
+        console.log('Parsing reminder:', {
+          reminderDate: habit.reminderDate,
+          reminderTime: habit.reminderTime,
+          dateTimeString: `${habit.reminderDate}T${habit.reminderTime}`,
+          parsedDate: dateTime,
+          isValid: !isNaN(dateTime.getTime())
+        });
         return {
           habit: habit.name ?? 'Habit reminder',
           date: habit.reminderDate as string,
@@ -171,6 +181,11 @@ export class WelcomeComponent implements OnInit {
 
     if (upcoming.length === 0) {
       this.nextReminder = null;
+      this.countdown = '';
+      if (this.countdownInterval) {
+        clearInterval(this.countdownInterval);
+        this.countdownInterval = null;
+      }
       return;
     }
 
@@ -178,8 +193,78 @@ export class WelcomeComponent implements OnInit {
     this.nextReminder = {
       habit: next.habit,
       dateLabel: this.getFriendlyDateLabel(next.date),
-      time: next.time
+      time: next.time,
+      dateTime: next.dateTime
     };
+    
+    console.log('Next reminder set:', this.nextReminder);
+    
+    // Start countdown timer
+    this.startCountdown();
+  }
+  
+  private startCountdown(): void {
+    // Clear any existing interval
+    if (this.countdownInterval) {
+      clearInterval(this.countdownInterval);
+    }
+    
+    console.log('Starting countdown timer');
+    
+    // Update countdown immediately
+    this.updateCountdown();
+    
+    // Update countdown every second
+    this.countdownInterval = setInterval(() => {
+      this.updateCountdown();
+    }, 1000);
+  }
+  
+  private updateCountdown(): void {
+    if (!this.nextReminder || !this.nextReminder.dateTime) {
+      this.countdown = '';
+      this.cdr.detectChanges();
+      return;
+    }
+    
+    const now = new Date();
+    const target = new Date(this.nextReminder.dateTime);
+    const diff = target.getTime() - now.getTime();
+    
+    if (diff <= 0) {
+      this.countdown = 'Time\'s up!';
+      if (this.countdownInterval) {
+        clearInterval(this.countdownInterval);
+        this.countdownInterval = null;
+      }
+      this.cdr.detectChanges();
+      return;
+    }
+    
+    const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+    const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+    const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+    
+    if (days > 0) {
+      this.countdown = `${days}d ${hours}h ${minutes}m ${seconds}s`;
+    } else if (hours > 0) {
+      this.countdown = `${hours}h ${minutes}m ${seconds}s`;
+    } else if (minutes > 0) {
+      this.countdown = `${minutes}m ${seconds}s`;
+    } else {
+      this.countdown = `${seconds}s`;
+    }
+    
+    // Force change detection to update the view
+    this.cdr.detectChanges();
+  }
+  
+  ngOnDestroy(): void {
+    if (this.countdownInterval) {
+      clearInterval(this.countdownInterval);
+      this.countdownInterval = null;
+    }
   }
 
   private getFriendlyDateLabel(dateString: string): string {

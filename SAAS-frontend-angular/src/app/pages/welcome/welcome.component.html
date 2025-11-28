@@ -3,7 +3,10 @@
   <div class="reminder-pill">Next reminder</div>
   <div class="reminder-info">
     <h3>{{ nextReminder.habit }}</h3>
-    <p>{{ nextReminder.dateLabel }} · {{ nextReminder.time }}</p>
+    <p>
+      {{ nextReminder.dateLabel }} · {{ nextReminder.time }}
+      <span class="countdown-text" *ngIf="countdown"> ⏱️ In {{ countdown }}</span>
+    </p>
   </div>
   <a routerLink="/reminders" class="reminder-manage">
     Manage reminders
