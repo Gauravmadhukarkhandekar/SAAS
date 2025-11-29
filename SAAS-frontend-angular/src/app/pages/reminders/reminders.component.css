@@ -10,7 +10,16 @@
   display: flex;
   flex-direction: column;
   gap: 3rem;
-  animation: fadeSlideUp 0.4s ease forwards;
+  animation: fadeIn 0.6s ease-in;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }
 
 .reminders-header {
@@ -117,17 +126,37 @@
 }
 
 .reminder-card {
-  padding: 2rem;
-  border-radius: 26px;
+  padding: 2.5rem;
+  border-radius: 28px;
   background: rgba(255, 255, 255, 0.95);
-  backdrop-filter: blur(16px);
-  border: 1px solid rgba(239, 68, 68, 0.12);
-  box-shadow: 0 24px 60px rgba(239, 68, 68, 0.18), 0 0 0 1px rgba(255, 255, 255, 0.4) inset;
+  backdrop-filter: blur(24px) saturate(180%);
+  -webkit-backdrop-filter: blur(24px) saturate(180%);
+  border: 1px solid rgba(239, 68, 68, 0.15);
+  box-shadow: 
+    0 28px 72px rgba(239, 68, 68, 0.15),
+    0 0 0 1px rgba(255, 255, 255, 0.6) inset;
   display: grid;
-  gap: 1.2rem;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  gap: 1.5rem;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
   position: relative;
   overflow: hidden;
+  animation: slideUp 0.6s ease-out backwards;
+}
+
+.reminder-card:nth-child(1) { animation-delay: 0.1s; }
+.reminder-card:nth-child(2) { animation-delay: 0.2s; }
+.reminder-card:nth-child(3) { animation-delay: 0.3s; }
+.reminder-card:nth-child(4) { animation-delay: 0.4s; }
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .reminder-card::before {
@@ -140,8 +169,25 @@
 }
 
 .reminder-card:hover {
-  transform: translateY(-6px);
-  box-shadow: 0 30px 70px rgba(239, 68, 68, 0.22), 0 0 0 1px rgba(255, 255, 255, 0.6) inset;
+  transform: translateY(-8px) scale(1.02);
+  box-shadow: 
+    0 36px 90px rgba(239, 68, 68, 0.2),
+    0 0 0 1px rgba(255, 255, 255, 0.9) inset;
+}
+
+.reminder-card::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+  transition: left 0.6s ease;
+}
+
+.reminder-card:hover::after {
+  left: 100%;
 }
 
 .reminder-card:hover::before {
