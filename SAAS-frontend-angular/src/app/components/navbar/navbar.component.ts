@@ -18,7 +18,8 @@ export class NavbarComponent {
     { label: 'Home', path: '/' },
     { label: 'Habits', path: '/habits' },
     { label: 'Reports', path: '/reports' },
-    { label: 'Reminders', path: '/reminders' }
+    { label: 'Reminders', path: '/reminders' },
+    { label: 'Pricing', path: '/subscription' }
   ];
 
   constructor(

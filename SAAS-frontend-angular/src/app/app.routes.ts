@@ -7,6 +7,7 @@ import { ReportsComponent } from './pages/reports/reports.component';
 import { RemindersComponent } from './pages/reminders/reminders.component';
 import { LoginComponent } from './pages/login/login.component';
 import { RegisterComponent } from './pages/register/register.component';
+import { SubscriptionComponent } from './pages/subscription/subscription.component';
 import { authGuard } from './auth.guard';
 
 export const routes: Routes = [
@@ -49,6 +50,7 @@ export const routes: Routes = [
   },
   { path: 'login', component: LoginComponent, title: 'Sign In' },
   { path: 'register', component: RegisterComponent, title: 'Create Account' },
+  { path: 'subscription', component: SubscriptionComponent, title: 'Pricing Plans' },
   {
     path: '**',
     redirectTo: ''
