@@ -1,9 +1,9 @@
 :host {
   display: block;
   padding: 0 1.5rem 5rem;
-  background: radial-gradient(circle at top right, rgba(239, 68, 68, 0.12) 0%, transparent 55%),
-    radial-gradient(circle at 10% 20%, rgba(249, 115, 22, 0.08) 0%, transparent 45%),
-    radial-gradient(circle at 90% 80%, rgba(236, 72, 153, 0.06) 0%, transparent 45%);
+  background: 
+    radial-gradient(circle at top right, rgba(99, 102, 241, 0.08) 0%, transparent 55%),
+    radial-gradient(circle at 10% 20%, rgba(139, 92, 246, 0.06) 0%, transparent 45%);
   animation: fadeIn 0.6s ease-in;
   position: relative;
   overflow-x: hidden;
@@ -99,23 +99,12 @@
 }
 
 .highlight {
-  background: linear-gradient(135deg, #ef4444, #f97316, #f59e0b);
+  background: linear-gradient(135deg, #6366f1, #8b5cf6);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
   position: relative;
   display: inline-block;
-  animation: gradientShift 3s ease infinite;
-  background-size: 200% 200%;
-}
-
-@keyframes gradientShift {
-  0%, 100% {
-    background-position: 0% 50%;
-  }
-  50% {
-    background-position: 100% 50%;
-  }
 }
 
 .hero p {
@@ -173,9 +162,15 @@
 }
 
 .btn-primary {
-  background: linear-gradient(135deg, #ef4444, #f97316);
+  background: linear-gradient(135deg, #6366f1, #8b5cf6);
   color: #fff;
-  box-shadow: 0 20px 40px rgba(239, 68, 68, 0.35);
+  box-shadow: 0 10px 30px rgba(99, 102, 241, 0.4);
+  transition: all 0.3s ease;
+}
+
+.btn-primary:hover {
+  background: linear-gradient(135deg, #4f46e5, #7c3aed);
+  box-shadow: 0 12px 40px rgba(99, 102, 241, 0.5);
 }
 
 .btn-outline {
@@ -223,7 +218,7 @@
   display: block;
   font-size: 2rem;
   font-weight: 800;
-  background: linear-gradient(135deg, #ef4444, #f97316);
+  background: linear-gradient(135deg, #6366f1, #8b5cf6);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -439,8 +434,8 @@
   top: 0;
   left: 0;
   right: 0;
-  height: 4px;
-  background: linear-gradient(90deg, #ef4444, #f97316, #f59e0b);
+  height: 3px;
+  background: linear-gradient(90deg, #6366f1, #8b5cf6);
   transform: scaleX(0);
   transform-origin: left;
   transition: transform 0.4s ease;
@@ -520,8 +515,8 @@
   top: 0;
   left: 0;
   right: 0;
-  height: 4px;
-  background: linear-gradient(90deg, #ef4444, #f97316, #f59e0b);
+  height: 3px;
+  background: linear-gradient(90deg, #6366f1, #8b5cf6);
   opacity: 0.8;
 }
 

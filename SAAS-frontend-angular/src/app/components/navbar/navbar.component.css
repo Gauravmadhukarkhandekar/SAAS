@@ -51,7 +51,7 @@
   width: 46px;
   height: 46px;
   border-radius: 14px;
-  background: linear-gradient(135deg, #ef4444, #f97316, #f59e0b);
+  background: linear-gradient(135deg, #6366f1, #8b5cf6);
   background-size: 200% 200%;
   display: flex;
   align-items: center;
@@ -60,7 +60,7 @@
   font-weight: 700;
   letter-spacing: 0.08em;
   transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-  box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
+  box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
   position: relative;
   overflow: hidden;
 }
@@ -78,7 +78,7 @@
 
 .brand:hover .brand-icon {
   transform: rotate(5deg) scale(1.05);
-  box-shadow: 0 6px 20px rgba(239, 68, 68, 0.4);
+  box-shadow: 0 6px 20px rgba(99, 102, 241, 0.4);
   background-position: right center;
 }
 
@@ -99,7 +99,7 @@
 }
 
 .brand:hover .brand-text {
-  background: linear-gradient(135deg, #ef4444, #f97316);
+  background: linear-gradient(135deg, #6366f1, #8b5cf6);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -129,7 +129,7 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background: linear-gradient(135deg, rgba(239, 68, 68, 0.1), rgba(249, 115, 22, 0.1));
+  background: linear-gradient(135deg, rgba(99, 102, 241, 0.1), rgba(139, 92, 246, 0.1));
   opacity: 0;
   transform: scaleX(0);
   transform-origin: left;
@@ -145,7 +145,7 @@
   bottom: 0;
   height: 3px;
   border-radius: 999px;
-  background: linear-gradient(90deg, #ef4444, #f97316, #f59e0b);
+  background: linear-gradient(90deg, #6366f1, #8b5cf6);
   transform: translateX(-50%) scaleX(0);
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   width: 80%;
@@ -200,7 +200,7 @@
   width: 38px;
   height: 38px;
   border-radius: 12px;
-  background: linear-gradient(135deg, #ef4444, #f97316, #f59e0b);
+  background: linear-gradient(135deg, #6366f1, #8b5cf6);
   background-size: 200% 200%;
   color: #fff;
   display: grid;
@@ -208,7 +208,7 @@
   font-weight: 700;
   letter-spacing: 0.05em;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
+  box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
 }
 
 .nav-user:hover .avatar {
@@ -269,6 +269,7 @@
   }
 }
 
+
 .user-menu button {
   border: none;
   background: none;
@@ -290,7 +291,7 @@
   top: 0;
   bottom: 0;
   width: 3px;
-  background: linear-gradient(135deg, #ef4444, #f97316);
+  background: linear-gradient(135deg, #6366f1, #8b5cf6);
   transform: scaleY(0);
   transition: transform 0.2s ease;
 }
@@ -364,7 +365,7 @@
 }
 
 .btn.btn-primary {
-  background: linear-gradient(135deg, #ef4444, #f97316, #f59e0b);
+  background: linear-gradient(135deg, #6366f1, #8b5cf6);
   background-size: 200% 200%;
   color: #fff;
   box-shadow: 0 8px 24px rgba(239, 68, 68, 0.35);
