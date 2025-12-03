@@ -55,25 +55,6 @@
     </div>
   </section>
 
-  <section class="channels">
-    <div class="section-heading">
-      <div>
-        <h2>Channels & signal tones</h2>
-        <p>Pick the medium that keeps you calm, focused, and accountable.</p>
-      </div>
-    </div>
-    <ul>
-      <li *ngFor="let channel of channels">
-        <div class="channel-dot"></div>
-        <div class="channel-body">
-          <strong>{{ channel.label }}</strong>
-          <p>{{ channel.description }}</p>
-        </div>
-        <button type="button" class="channel-action">Configure</button>
-      </li>
-    </ul>
-  </section>
-
   <!-- Modal for calendar and time selection -->
   <div class="modal-backdrop" *ngIf="cadenceModalOpen">
     <div class="modal-card">
