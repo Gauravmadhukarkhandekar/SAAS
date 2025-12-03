@@ -37,22 +37,6 @@
 
     <section class="visual-grid">
       <article class="visual-card">
-        <h2>Momentum this week</h2>
-        <div class="line-chart" *ngIf="momentumTimeline.length > 0">
-          <div class="chart-column" *ngFor="let point of momentumTimeline">
-            <div class="chart-bar" [style.height.%]="point.value"></div>
-            <span class="chart-label">{{ point.day }}</span>
-          </div>
-        </div>
-        <p class="chart-hint" *ngIf="stats.totalHabits > 0">
-          Track your daily completion rate. Aim for consistency!
-        </p>
-        <p class="chart-hint" *ngIf="stats.totalHabits === 0">
-          Start creating habits to see your momentum chart.
-        </p>
-      </article>
-
-      <article class="visual-card">
         <h2>Habit cadence mix</h2>
         <ul class="breakdown-list" *ngIf="cadenceBreakdown.length > 0">
           <li *ngFor="let cadence of cadenceBreakdown">
