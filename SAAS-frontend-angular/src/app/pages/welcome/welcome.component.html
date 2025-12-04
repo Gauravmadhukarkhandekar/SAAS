@@ -54,8 +54,8 @@
       <!-- Show real data for logged-in users -->
       <div class="glass-card progress-card" *ngIf="isLoggedIn && recentHabits.length > 0">
         <header>
-          <span class="tag">{{ recentHabits[0]?.category || 'Habit' }}</span>
-          <span class="streak">{{ recentHabits[0]?.currentStreak || 0 }} day streak</span>
+          <span class="tag">{{ recentHabits[0].category || 'Habit' }}</span>
+          <span class="streak">{{ recentHabits[0].currentStreak || 0 }} day streak</span>
         </header>
         <div class="chart">
           <div class="chart-bar" *ngFor="let habit of recentHabits.slice(0, 5)" 
@@ -88,8 +88,8 @@
       
       <div class="glass-card checkin-card" *ngIf="isLoggedIn && recentHabits.length > 0">
         <p>Latest Habit</p>
-        <h3>"{{ recentHabits[0]?.name }}"</h3>
-        <span class="timestamp">{{ recentHabits[0]?.lastCompletedDate ? (recentHabits[0].lastCompletedDate | date: 'medium') : 'Not completed yet' }}</span>
+        <h3>"{{ recentHabits[0].name }}"</h3>
+        <span class="timestamp">{{ recentHabits[0].lastCompletedDate ? (recentHabits[0].lastCompletedDate | date: 'medium') : 'Not completed yet' }}</span>
       </div>
       
       <div class="glass-card checkin-card" *ngIf="!isLoggedIn">
