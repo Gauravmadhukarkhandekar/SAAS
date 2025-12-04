@@ -47,7 +47,7 @@ app.get('/api/health', (_req, res) => res.json({ message: 'Server is running' })
    3️⃣  FALLBACK: SERVE ANGULAR index.html
        (For Angular routing: /dashboard, /login, etc.)
 ------------------------------------------------------ */
-app.get('*', (req, res) => {
+app.get(/.*/, (req, res) => {
   res.sendFile(path.join(angularDistPath, 'index.html'));
 });
 
