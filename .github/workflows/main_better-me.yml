@@ -20,19 +20,20 @@ jobs:
         with:
           node-version: '24.x'
 
-      # ⭐ FIX: Run NPM inside SAAS-backend
+      # Install backend dependencies
       - name: Install dependencies & build backend
         run: |
           npm install
           npm run build --if-present
         working-directory: SAAS-backend
 
-      # ⭐ Upload backend folder as deployment artifact
+      # ⭐ Upload ONLY the contents (not the folder name)
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v4
         with:
           name: node-backend
-          path: SAAS-backend/
+          path: SAAS-backend/**
+          if-no-files-found: error
 
   deploy:
     runs-on: ubuntu-latest
@@ -54,6 +55,7 @@ jobs:
           tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_9BD32F2988BB41068DD1BFF5D76CA39E }}
           subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_6D42904CEB8A4F9E95FB98643610F0F7 }}
 
+      # ⭐ Deploy backend contents directly to wwwroot
       - name: Deploy to Azure Web App
         uses: azure/webapps-deploy@v3
         with:
