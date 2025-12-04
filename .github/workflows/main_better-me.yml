@@ -61,4 +61,5 @@ jobs:
         with:
           app-name: 'better-me'
           slot-name: 'Production'
-          package: node-backend
+          package: .
+
