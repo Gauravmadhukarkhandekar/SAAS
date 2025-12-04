@@ -17,6 +17,10 @@ export interface AuthResponse {
   user: AuthUser;
 }
 
+export interface ProfileResponse {
+  user: AuthUser;
+}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -46,6 +50,43 @@ export class AuthService {
       .pipe(
         tap((response) => this.persistSession(response)),
         catchError((error) => this.handleError(error, 'Registration failed'))
+      );
+  }
+
+  getProfile(): Observable<ProfileResponse> {
+    return this.http
+      .get<ProfileResponse>(`${this.baseUrl}/profile`, {
+        headers: {
+          Authorization: `Bearer ${this.token}`
+        },
+        withCredentials: true
+      })
+      .pipe(
+        catchError((error) => this.handleError(error, 'Failed to load profile'))
+      );
+  }
+
+  updateProfile(payload: { password?: string; subscriptionPlan?: 'basic' | 'premium' | 'pro' })
+    : Observable<ProfileResponse> {
+    return this.http
+      .put<ProfileResponse>(`${this.baseUrl}/profile`, payload, {
+        headers: {
+          Authorization: `Bearer ${this.token}`
+        },
+        withCredentials: true
+      })
+      .pipe(
+        tap((response) => {
+          // Update local session user if plan changed
+          const session = this.currentUserSubject.value;
+          if (session) {
+            this.persistSession({
+              ...session,
+              user: { ...session.user, ...response.user }
+            });
+          }
+        }),
+        catchError((error) => this.handleError(error, 'Failed to update profile'))
       );
   }
 

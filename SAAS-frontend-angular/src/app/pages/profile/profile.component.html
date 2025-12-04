@@ -57,6 +57,7 @@
             <button
               type="button"
               class="btn btn-outline-secondary btn-sm"
+              (click)="openChangePassword()"
             >
               Change Password
             </button>
@@ -75,6 +76,7 @@
             <button
               type="button"
               class="btn btn-outline-primary btn-sm"
+              (click)="openChangePlan()"
             >
               Change Plan
             </button>
@@ -83,3 +85,129 @@
       </div>
     </div>
   </div>
+
+<!-- Change Password Modal -->
+<div class="modal-backdrop" *ngIf="showChangePassword">
+  <div class="modal-dialog">
+    <div class="modal-card">
+      <h2 class="mb-3">Change Password</h2>
+
+      <div class="mb-3">
+        <label class="form-label">New Password</label>
+        <div class="input-group">
+          <input
+            [type]="showNewPassword ? 'text' : 'password'"
+            class="form-control"
+            [(ngModel)]="newPassword"
+            [disabled]="passwordLoading"
+          />
+          <button
+            class="btn btn-outline-secondary"
+            type="button"
+            (click)="showNewPassword = !showNewPassword"
+            [disabled]="passwordLoading"
+          >
+            {{ showNewPassword ? 'Hide' : 'View' }}
+          </button>
+        </div>
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label">Confirm Password</label>
+        <div class="input-group">
+          <input
+            [type]="showConfirmPassword ? 'text' : 'password'"
+            class="form-control"
+            [(ngModel)]="confirmPassword"
+            [disabled]="passwordLoading"
+          />
+          <button
+            class="btn btn-outline-secondary"
+            type="button"
+            (click)="showConfirmPassword = !showConfirmPassword"
+            [disabled]="passwordLoading"
+          >
+            {{ showConfirmPassword ? 'Hide' : 'View' }}
+          </button>
+        </div>
+      </div>
+
+      <div *ngIf="passwordError" class="alert alert-danger py-2">
+        {{ passwordError }}
+      </div>
+
+      <div *ngIf="passwordSuccess" class="alert alert-success py-2">
+        {{ passwordSuccess }}
+      </div>
+
+      <div class="d-flex justify-content-end gap-2 mt-4">
+        <button
+          type="button"
+          class="btn btn-outline-secondary"
+          (click)="closeChangePassword()"
+          [disabled]="passwordLoading"
+        >
+          Cancel
+        </button>
+        <button
+          type="button"
+          class="btn btn-primary"
+          (click)="submitPasswordChange()"
+          [disabled]="passwordLoading"
+        >
+          {{ passwordLoading ? 'Saving...' : 'Save Password' }}
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- Change Plan Modal -->
+<div class="modal-backdrop" *ngIf="showChangePlan">
+  <div class="modal-dialog">
+    <div class="modal-card">
+      <h2 class="mb-3">Change Subscription Plan</h2>
+
+      <div class="mb-3">
+        <label class="form-label">Select Plan</label>
+        <select
+          class="form-select"
+          [(ngModel)]="selectedPlan"
+          [disabled]="planLoading"
+        >
+          <option value="basic">Basic</option>
+          <option value="premium">Premium</option>
+          <option value="pro">Pro</option>
+        </select>
+      </div>
+
+      <div *ngIf="planError" class="alert alert-danger py-2">
+        {{ planError }}
+      </div>
+
+      <div *ngIf="planSuccess" class="alert alert-success py-2">
+        {{ planSuccess }}
+      </div>
+
+      <div class="d-flex justify-content-end gap-2 mt-4">
+        <button
+          type="button"
+          class="btn btn-outline-secondary"
+          (click)="closeChangePlan()"
+          [disabled]="planLoading"
+        >
+          Cancel
+        </button>
+        <button
+          type="button"
+          class="btn btn-primary"
+          (click)="submitPlanChange()"
+          [disabled]="planLoading"
+        >
+          {{ planLoading ? 'Saving...' : 'Save Plan' }}
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
