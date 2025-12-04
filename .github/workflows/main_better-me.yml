@@ -22,15 +22,12 @@ jobs:
         run: npm install
         working-directory: SAAS-backend
 
-      - name: Upload backend artifact (FLATTENED)
+      - name: Upload backend artifact (includes full backend)
         uses: actions/upload-artifact@v4
         with:
           name: node-backend
-          path: SAAS-backend/*
-          ignore: |
-            SAAS-frontend-angular/**
-            .git/**
-            README.md
+          path: SAAS-backend/**
+          if-no-files-found: error
 
   deploy:
     runs-on: ubuntu-latest
@@ -45,12 +42,12 @@ jobs:
       - name: Login to Azure
         uses: azure/login@v2
         with:
-          client-id: ${{ secrets.AZURE_CLIENT_ID }}
-          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
-          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_2A6AA3CC5C3C4DA68847EDCB2A982993 }}
+          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_9BD32F2988BB41068DD1BFF5D76CA39E }}
+          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_6D42904CEB8A4F9E95FB98643610F0F7 }}
 
       - name: Deploy backend to Azure
         uses: azure/webapps-deploy@v3
         with:
           app-name: "better-me"
-          package: node-backend
+          package: .
