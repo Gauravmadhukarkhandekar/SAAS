@@ -1,6 +1,8 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
+const path = require('path');
+
 const authRoutes = require('./routes/auth');
 const habitRoutes = require('./routes/habit');
 const habitLogRoutes = require('./routes/habitLog');
@@ -20,7 +22,19 @@ const corsOptions = {
 };
 app.use(cors(corsOptions));
 
-// Routes
+/* -----------------------------------------------------
+   1️⃣  SERVE ANGULAR FRONTEND (dist folder)
+------------------------------------------------------ */
+
+// Path to your Angular build folder copied into SAAS-backend
+const angularDistPath = path.join(__dirname, 'dist');
+
+// Serve Angular static files
+app.use(express.static(angularDistPath));
+
+/* -----------------------------------------------------
+   2️⃣  API ROUTES (must start with /api)
+------------------------------------------------------ */
 app.use('/api/auth', authRoutes);
 app.use('/api/habits', habitRoutes);
 app.use('/api/habitLogs', habitLogRoutes);
@@ -28,13 +42,23 @@ app.use('/api/reminders', reminderRoutes);
 
 app.get('/health', (_req, res) => res.json({ ok: true }));
 app.get('/api/health', (_req, res) => res.json({ message: 'Server is running' }));
-app.get('/', (_req, res) => res.send('API is running'));
 
-// Only connect to DB and start server if NOT in test mode
+/* -----------------------------------------------------
+   3️⃣  FALLBACK: SERVE ANGULAR index.html
+       (For Angular routing: /dashboard, /login, etc.)
+------------------------------------------------------ */
+app.get('*', (req, res) => {
+  res.sendFile(path.join(angularDistPath, 'index.html'));
+});
+
+/* -----------------------------------------------------
+   4️⃣  DATABASE + SERVER STARTUP FOR AZURE
+------------------------------------------------------ */
 if (process.env.NODE_ENV !== 'test') {
+
   const MONGODB_URI = process.env.MONGODB_URI;
   const PORT = process.env.PORT || 3001;
-  const HOST = '0.0.0.0';   // ⭐ REQUIRED FOR AZURE
+  const HOST = '0.0.0.0';   // Required for Azure
 
   if (!MONGODB_URI) {
     console.error("❌ ERROR: MONGODB_URI is not set in Azure App Settings.");
@@ -44,7 +68,7 @@ if (process.env.NODE_ENV !== 'test') {
     .then(() => {
       console.log('Connected to MongoDB');
       app.listen(PORT, HOST, () => {
-        console.log(`Server running on http://${HOST}:${PORT}`);
+        console.log(`Server running at http://${HOST}:${PORT}`);
       });
     })
     .catch(err => {
