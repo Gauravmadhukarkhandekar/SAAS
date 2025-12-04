@@ -1,7 +1,4 @@
-# Docs for the Azure Web Apps Deploy action: https://github.com/Azure/webapps-deploy
-# More GitHub Actions for Azure: https://github.com/Azure/actions
-
-name: Build and deploy Angular app to Azure Web App - better-me
+name: Build and deploy Node.js backend to Azure Web App - better-me
 
 on:
   push:
@@ -23,19 +20,19 @@ jobs:
         with:
           node-version: '24.x'
 
-      # ⭐ FIX: Run npm inside SAAS-frontend-angular folder
-      - name: Install dependencies & build Angular
+      # ⭐ FIX: Run NPM inside SAAS-backend
+      - name: Install dependencies & build backend
         run: |
           npm install
           npm run build --if-present
-        working-directory: SAAS-frontend-angular
+        working-directory: SAAS-backend
 
-      # ⭐ Upload the Angular build output (dist folder)
+      # ⭐ Upload backend folder as deployment artifact
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v4
         with:
-          name: angular-app
-          path: SAAS-frontend-angular/dist/
+          name: node-backend
+          path: SAAS-backend/
 
   deploy:
     runs-on: ubuntu-latest
@@ -48,7 +45,7 @@ jobs:
       - name: Download artifact from build job
         uses: actions/download-artifact@v4
         with:
-          name: angular-app
+          name: node-backend
 
       - name: Login to Azure
         uses: azure/login@v2
