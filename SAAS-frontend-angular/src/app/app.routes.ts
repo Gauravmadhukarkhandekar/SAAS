@@ -9,6 +9,7 @@ import { LoginComponent } from './pages/login/login.component';
 import { RegisterComponent } from './pages/register/register.component';
 import { SubscriptionComponent } from './pages/subscription/subscription.component';
 import { authGuard } from './auth.guard';
+import { ProfileComponent } from './pages/profile/profile.component';
 
 export const routes: Routes = [
   { path: '', component: WelcomeComponent, title: 'BetterMe | Habit Tracker' },
@@ -48,9 +49,27 @@ export const routes: Routes = [
     title: 'Smart Reminders',
     canActivate: [authGuard]
   },
-  { path: 'login', component: LoginComponent, title: 'Sign In' },
-  { path: 'register', component: RegisterComponent, title: 'Create Account' },
-  { path: 'subscription', component: SubscriptionComponent, title: 'Pricing Plans' },
+  { 
+    path: 'login', 
+    component: LoginComponent, 
+    title: 'Sign In' 
+  },
+  { 
+    path: 'register', 
+    component: RegisterComponent, 
+    title: 'Create Account' 
+  },
+  { 
+    path: 'subscription', 
+    component: SubscriptionComponent, 
+    title: 'Pricing Plans' 
+  },
+  {
+    path: 'profile', 
+    component: ProfileComponent, 
+    title: 'User Profile', 
+    canActivate: [authGuard]
+  },
   {
     path: '**',
     redirectTo: ''

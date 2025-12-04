@@ -3,6 +3,8 @@ const bcrypt = require('bcrypt');
 const { v4: uuidv4 } = require('uuid');
 const User = require('../model/user');
 const AuthToken = require('../model/authToken');
+const authController = require('../controllers/authController');
+const authMiddleware = require('../middleware/auth.js')
 
 const router = express.Router();
 
@@ -128,6 +130,48 @@ router.post('/login', async (req, res) => {
   }
 });
 
+// Get profile endpoint 
+router.get('/profile', async (req, res) => {
+  try {
+    const token = req.headers.authorization?.replace('Bearer ', '');
+
+    if (!token) {
+      return res.status(401).json({ message: 'Authentication required' });
+    }
+
+    // Verify token
+    const authToken = await AuthToken.findOne({ tokenValue: token });
+    if (!authToken) {
+      return res.status(401).json({ message: 'Invalid token' });
+    }
+
+    // Check if token is expired
+    if (new Date() > authToken.expiryDate) {
+      await AuthToken.deleteOne({ tokenId: authToken.tokenId });
+      return res.status(401).json({ message: 'Token expired' });
+    }
+
+    // Get user
+    const user = await User.findOne({ userId: authToken.userId });
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    return res.json({
+      user: {
+        userId: user.userId,
+        name: user.name,
+        email: user.email,
+        isPro: user.isPro,
+        subscriptionPlan: user.subscriptionPlan
+      }
+    });
+  } catch (error) {
+    console.error('Get profile error:', error);
+    res.status(500).json({ message: 'Server error fetching profile' });
+  }
+});
+
 // Update profile endpoint (requires authentication middleware)
 router.put('/profile', async (req, res) => {
   try {
@@ -156,22 +200,18 @@ router.put('/profile', async (req, res) => {
     }
 
     // Update user data
-    const { name, email, isPro } = req.body;
+    const { password, subscriptionPlan } = req.body;
 
-    if (name) {
-      user.name = name;
+    if (password) {
+      if (password.length < 6) {
+        return res.status(400).json({ message: 'Password must be at least 6 characters' });
+      }
+      user.password = await bcrypt.hash(password, 10);
     }
 
-    if (email) {
-      // Check if email is already taken by another user
-      const emailExists = await User.findOne({ 
-        email: email.toLowerCase(), 
-        userId: { $ne: user.userId } 
-      });
-      if (emailExists) {
-        return res.status(400).json({ message: 'Email already in use' });
-      }
-      user.email = email.toLowerCase();
+    if (subscriptionPlan) {
+      user.subscriptionPlan = subscriptionPlan;
+      user.isPro = subscriptionPlan === 'pro';
     }
 
     if (typeof isPro === 'boolean') {
@@ -229,7 +269,8 @@ router.get('/verify', async (req, res) => {
         userId: user.userId,
         name: user.name,
         email: user.email,
-        isPro: user.isPro
+        isPro: user.isPro,
+        subscriptionPlan: user.subscriptionPlan
       }
     });
   } catch (error) {
