@@ -58,24 +58,6 @@ export class SubscriptionComponent {
         'Priority support',
         'Mobile app access'
       ]
-    },
-    {
-      id: 'pro',
-      name: 'Pro',
-      description: 'Maximum productivity with all premium features',
-      price: 19.99,
-      period: 'month',
-      icon: '🚀',
-      features: [
-        'Everything in Premium',
-        'AI-powered insights',
-        'Team collaboration',
-        'Custom integrations',
-        'Advanced reporting',
-        '1-on-1 coaching calls',
-        'API access',
-        'White-label options'
-      ]
     }
   ];
 
